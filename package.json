@@ -1,6 +1,6 @@
 {
   "name": "rt-scheduler",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "drag & drop scheduler component",
   "main": "dist/index.js",
   "author": "ryn",
