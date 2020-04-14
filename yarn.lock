@@ -9269,6 +9269,11 @@ rsvp@^4.8.4:
   resolved "https://registry.yarnpkg.com/rsvp/-/rsvp-4.8.5.tgz#c8f155311d167f68f21e168df71ec5b083113734"
   integrity sha512-nfMOlASu9OnRJo1mbEk2cz0D56a1MBNrJ7orjRZQG10XDyuvwksKbuXNp6qa+kbn839HwjwhBzhFmdsaEAfauA==
 
+rt-scheduler@^1.0.14:
+  version "1.0.14"
+  resolved "https://registry.yarnpkg.com/rt-scheduler/-/rt-scheduler-1.0.14.tgz#330c8a473041d53d4d50479861796e49bf532943"
+  integrity sha512-RmTy6T7aVNm5ah3rvmh4iR0nis8H0Sm2BqCzGBYFysWeTkyNqEFZ1m30MziucWB4m4gClcNO4c1pYgEnXa8+VA==
+
 run-async@^2.2.0, run-async@^2.4.0:
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/run-async/-/run-async-2.4.0.tgz#e59054a5b86876cfae07f431d18cbaddc594f1e8"
