@@ -1,5 +1,5 @@
 {
-  "name": "react-scheduler",
+  "name": "rt-scheduler",
   "version": "1.0.0",
   "description": "drag & drop scheduler component",
   "main": "dist/index.js",
@@ -13,7 +13,8 @@
     "start:dev": "webpack-dev-server --config ./config/webpack.dev.conf.js",
     "lint": "eslint --ext .ts --ext .tsx src/",
     "lint:fix": "eslint --ext .ts --ext .tsx --fix src/",
-    "test": "jest"
+    "test": "jest",
+    "release": "np --no-publish"
   },
   "keywords": [
     "react",
@@ -58,6 +59,7 @@
     "jest": "^25.2.4",
     "jest-css-modules": "^2.1.0",
     "node-sass": "^4.13.1",
+    "np": "^6.2.1",
     "postcss-import": "^12.0.1",
     "postcss-loader": "^3.0.0",
     "postcss-preset-env": "^6.7.0",
