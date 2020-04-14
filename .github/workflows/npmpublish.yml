@@ -42,6 +42,7 @@ jobs:
           node-version: 12
           registry-url: https://npm.pkg.github.com/
       - run: yarn install --frozen-lockfile
+      - run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.access_token }}" > ~/.npmrc
       - run: yarn publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.access_token}}
