@@ -93,5 +93,12 @@
   },
   "engines": {
     "node": ">=12.13.0"
-  }
+  },
+  "files": [
+    "package.json",
+    "README.md",
+    "LICENSE",
+    "dist/index.js",
+    "dist/index.d.ts"
+  ]
 }
