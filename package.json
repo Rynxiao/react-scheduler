@@ -1,6 +1,6 @@
 {
   "name": "rt-scheduler",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "drag & drop scheduler component",
   "main": "dist/index.js",
   "author": "ryn",
@@ -24,7 +24,9 @@
     "type": "git",
     "url": "git+https://github.com/Rynxiao/react-scheduler"
   },
-  "publishConfig": { "registry": "https://npm.pkg.github.com/" },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
   "peerDependencies": {
     "prop-types": "^15.7.2",
     "react": "^16.13.1",
