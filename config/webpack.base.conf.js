@@ -8,8 +8,8 @@ module.exports = {
     rules: [
       {
         test: /\.tsx?$/,
-        loader: 'ts-loader',
         exclude: /node_modules/,
+        loader: 'ts-loader',
         options: {
           compilerOptions: {
             outDir: path.resolve(root, 'dist'),
@@ -23,23 +23,7 @@ module.exports = {
       },
       {
         test: /\.css$/i,
-        use: ['style-loader', 'css-loader', 'postcss-loader'],
-      },
-      {
-        test: /\.s[ac]ss$/i,
-        use: [
-          'style-loader',
-          {
-            loader: 'css-loader',
-            options: {
-              modules: {
-                localIdentName: 'rt-scheduler-[local]',
-              },
-            },
-          },
-          'postcss-loader',
-          'sass-loader',
-        ],
+        use: ['style-loader', 'css-loader'],
       },
       {
         test: /\.(jpe?g|png|gif)$/i,
@@ -50,7 +34,7 @@ module.exports = {
       },
       {
         test: /\.svg$/,
-        loader: 'svg-inline-loader?classPrefix=rt-image',
+        loader: 'svg-inline-loader?classPrefix=rt-scheduler',
       },
     ],
   },
