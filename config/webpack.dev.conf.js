@@ -1,4 +1,5 @@
 const merge = require('webpack-merge');
+const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const path = require('path');
@@ -25,6 +26,7 @@ module.exports = merge(base, {
       },
       hash: true,
     }),
+    new webpack.HotModuleReplacementPlugin(),
   ],
   devServer: {
     contentBase: distPath,
