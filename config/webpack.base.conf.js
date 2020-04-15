@@ -1,4 +1,5 @@
 const path = require('path');
+// const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 
 const root = path.resolve(__dirname, '..');
 
@@ -57,4 +58,7 @@ module.exports = {
     modules: ['node_modules', root],
     extensions: ['.ts', '.tsx', '.js', '.jsx', '.es6'],
   },
+  plugins: [
+    // new BundleAnalyzerPlugin(),
+  ],
 };
