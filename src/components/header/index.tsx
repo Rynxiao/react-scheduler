@@ -7,7 +7,7 @@ import Box from '@material-ui/core/Box';
 import MenuIcon from '@material-ui/icons/Menu';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-import { DatePicker } from '@material-ui/pickers';
+import { DatePicker } from '@material-ui/pickers/DatePicker/DatePicker';
 import NavigateBefore from '@material-ui/icons/NavigateBefore';
 import NavigateNext from '@material-ui/icons/NavigateNext';
 import Today from '@material-ui/icons/Today';

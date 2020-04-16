@@ -12,7 +12,7 @@ module.exports = merge(base, {
   devtool: 'source-map',
   entry: path.join(srcPath, 'index.tsx'),
   output: {
-    library: 'ReactImage',
+    library: 'ReactScheduler',
     libraryTarget: 'umd',
     path: distPath,
     filename: 'index.js',
