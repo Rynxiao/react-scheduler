@@ -9,7 +9,11 @@
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "declaration": true,
-    "allowJs": true
+    "allowJs": true,
+    "baseUrl": "./src/",
+    "paths": {
+      "@app/*": ["./*"]
+    }
   },
   "include": [
     "src"

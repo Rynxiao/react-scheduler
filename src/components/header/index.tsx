@@ -43,7 +43,7 @@ const Header: React.FC<Props> = ({ onCollapse }) => {
   );
 
   return (
-    <AppBar position="static">
+    <AppBar position="static" className={classes.appBar}>
       <Toolbar>
         <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu" onClick={onCollapse}>
           <MenuIcon />

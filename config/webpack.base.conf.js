@@ -41,6 +41,9 @@ module.exports = {
   resolve: {
     modules: ['node_modules', root],
     extensions: ['.ts', '.tsx', '.js', '.jsx', '.es6'],
+    alias: {
+      '@app': path.resolve(root, 'src'),
+    },
   },
   plugins: [
     // new BundleAnalyzerPlugin(),

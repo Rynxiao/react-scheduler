@@ -1,7 +1,6 @@
 import { Theme as AugmentedTheme } from '@material-ui/core/styles';
 import { fade } from '@material-ui/core/styles/colorManipulator';
-import common from '@material-ui/core/colors/common';
-import { useStyles } from '../../utils';
+import { useStyles } from '@app/utils';
 
 const useHeaderStyles = useStyles((theme: AugmentedTheme) => ({
   menuButton: {
@@ -28,11 +27,11 @@ const useHeaderStyles = useStyles((theme: AugmentedTheme) => ({
     fill: theme.palette.common.white,
   },
   today: {
-    color: common.white,
-    borderColor: common.white,
+    color: theme.palette.common.white,
+    borderColor: theme.palette.common.white,
     padding: theme.spacing(0, 2),
     '&:hover': {
-      borderColor: common.white,
+      borderColor: theme.palette.common.white,
     },
   },
   title: {
