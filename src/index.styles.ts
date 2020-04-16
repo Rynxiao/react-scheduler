@@ -1,5 +1,5 @@
-import { Theme as AugmentedTheme } from '@material-ui/core/styles';
 import { useStyles } from '@app/utils';
+import { Theme as AugmentedTheme } from '@material-ui/core/styles';
 
 interface Props {
   width: string | number;

@@ -1,11 +1,11 @@
 import 'dayjs';
-import React, { useState } from 'react';
+import { appTheme } from '@app/utils';
+import DayjsUtils from '@date-io/dayjs';
 import { ThemeProvider } from '@material-ui/core/styles';
 import MuiPickersUtilsProvider from '@material-ui/pickers/MuiPickersUtilsProvider';
-import DayjsUtils from '@date-io/dayjs';
-import { appTheme } from '@app/utils';
-import useIndexStyles, { sidebarStyles } from './index.styles';
+import React, { useState } from 'react';
 import Header from './components/header';
+import useIndexStyles, { sidebarStyles } from './index.styles';
 
 export default () => {
   const [sidebar, setSidebar] = useState(true);
