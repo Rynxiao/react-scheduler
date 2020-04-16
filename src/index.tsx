@@ -1,39 +1,26 @@
-import React from 'react';
-import Grid from '@material-ui/core/Grid';
-import IconButton from '@material-ui/core/IconButton';
-import NavigateBefore from '@material-ui/icons/NavigateBefore';
-import NavigateNext from '@material-ui/icons/NavigateNext';
+import 'dayjs';
+import React, { useState } from 'react';
 import { ThemeProvider } from '@material-ui/core/styles';
-import { useIndexStyles } from './index.styles';
+import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+import DayjsUtils from '@date-io/dayjs';
 import { appTheme } from './utils';
+import useIndexStyles, { sidebarStyles } from './index.styles';
+import Header from './components/header';
 
 export default () => {
-  const classes = useIndexStyles();
+  const [sidebar, setSidebar] = useState(true);
+  const classes = useIndexStyles(sidebarStyles(sidebar, appTheme));
   return (
     <ThemeProvider theme={appTheme}>
-      <div className={classes.container}>
-        <div>
-          <Grid container>
-            <Grid item xs={6}>
-              <IconButton color="primary" aria-label="navigate_before">
-                <NavigateBefore />
-              </IconButton>
-              <IconButton color="primary" aria-label="navigate_next">
-                <NavigateNext />
-              </IconButton>
-              <span className={classes.root}>text</span>
-            </Grid>
-            <Grid item xs={6}>
-              <IconButton aria-label="delete">
-                <NavigateBefore />
-              </IconButton>
-            </Grid>
-          </Grid>
+      <MuiPickersUtilsProvider utils={DayjsUtils}>
+        <div className={classes.container}>
+          <Header onCollapse={() => setSidebar(!sidebar)} />
+          <div className={classes.body}>
+            <div className={classes.sidebar}>sidebar</div>
+            <div className={classes.content}>content</div>
+          </div>
         </div>
-        <div className={classes.body}>
-          body
-        </div>
-      </div>
+      </MuiPickersUtilsProvider>
     </ThemeProvider>
   );
 };
