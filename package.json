@@ -26,8 +26,11 @@
     "url": "git+https://github.com/Rynxiao/react-scheduler"
   },
   "dependencies": {
+    "@date-io/dayjs": "1.x",
     "@material-ui/core": "^4.9.10",
-    "@material-ui/icons": "^4.9.1"
+    "@material-ui/icons": "^4.9.1",
+    "@material-ui/pickers": "^3.2.10",
+    "dayjs": "^1.8.24"
   },
   "peerDependencies": {
     "prop-types": "^15.7.2",
