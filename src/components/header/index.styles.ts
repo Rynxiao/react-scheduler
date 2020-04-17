@@ -1,6 +1,5 @@
+import { AugmentedTheme, fade } from '@app/material/styles';
 import { useStyles } from '@app/utils';
-import { Theme as AugmentedTheme } from '@material-ui/core/styles';
-import { fade } from '@material-ui/core/styles/colorManipulator';
 
 const useHeaderStyles = useStyles((theme: AugmentedTheme) => ({
   menuButton: {

@@ -1,8 +1,8 @@
 import 'dayjs';
+import { MuiPickersUtilsProvider } from '@app/material/pickers';
+import { ThemeProvider } from '@app/material/styles';
 import { appTheme } from '@app/utils';
 import DayjsUtils from '@date-io/dayjs';
-import { ThemeProvider } from '@material-ui/core/styles';
-import MuiPickersUtilsProvider from '@material-ui/pickers/MuiPickersUtilsProvider';
 import React, { useState } from 'react';
 import Header from './components/header';
 import useIndexStyles, { sidebarStyles } from './index.styles';

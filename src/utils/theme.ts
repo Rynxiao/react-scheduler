@@ -1,12 +1,12 @@
-import blue from '@material-ui/core/colors/blue';
+import { blue } from '@app/material/colors';
 import {
   createMuiTheme,
   createStyles,
   makeStyles,
   responsiveFontSizes,
   StyleRules,
-  Theme as AugmentedTheme,
-} from '@material-ui/core/styles';
+  AugmentedTheme,
+} from '@app/material/styles';
 
 const theme = createMuiTheme({
   palette: {
