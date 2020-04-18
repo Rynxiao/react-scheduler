@@ -38,7 +38,10 @@
         "order": "asc",
         "caseInsensitive": true
       }
-    }]
+    }],
+    "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
+    "react/prop-types": "off",
+    "max-len": ["error", { "code": 150 }]
   },
   "settings": {
     "import/resolver": {

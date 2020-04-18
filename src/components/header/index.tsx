@@ -1,3 +1,4 @@
+import { ModeKey } from '@app/components/types';
 import {
   AppBar,
   Box,
@@ -16,35 +17,43 @@ import {
 } from '@app/material/icons';
 import { DatePicker } from '@app/material/pickers';
 import dayjs, { Dayjs } from 'dayjs';
-import PropTypes from 'prop-types';
 import React from 'react';
-import VIEW_MODE, { ModeKey } from './constants';
+import VIEW_MODE from '../constants';
 import useHeaderStyles from './index.styles';
 
 interface Props {
+  mode: ModeKey;
   onCollapse(): void;
+  onModeChange(mode: ModeKey): void;
+  selectedDate: Dayjs;
+  onSelectDate(date: Dayjs): void;
 }
 
-const Header: React.FC<Props> = ({ onCollapse }) => {
-  const [selectedDate, setSelectedDate] = React.useState<Dayjs>(dayjs());
+const Header: React.FC<Props> = ({
+  mode,
+  onCollapse,
+  onModeChange,
+  selectedDate,
+  onSelectDate,
+}) => {
   const [open, setOpen] = React.useState(false);
-  const [mode, setMode] = React.useState(VIEW_MODE.DAY);
   const classes = useHeaderStyles();
 
-  const handleSelectToday = () => setSelectedDate(dayjs());
+  const handleSelectToday = () => onSelectDate(dayjs());
   const handleOpenDatePicker = () => setOpen(true);
   const handleCloseDatePicker = () => setOpen(false);
-  const handleSelectPrevious = () => setSelectedDate(selectedDate.add(-1, 'day'));
-  const handleSelectNext = () => setSelectedDate(selectedDate.add(1, 'day'));
+  const handleSelectPrevious = () => onSelectDate(selectedDate.add(-1, 'day'));
+  const handleSelectNext = () => onSelectDate(selectedDate.add(1, 'day'));
 
   const handleDateChange = (date: Dayjs) => {
-    setSelectedDate(date);
+    onSelectDate(date);
     handleCloseDatePicker();
   };
 
-  const handleModeChange = (event: React.ChangeEvent<{ value: string }>) => (
-    setMode(event.target.value)
-  );
+  const handleModeChange = (event: React.ChangeEvent<{ value: ModeKey }>) => {
+    const viewMode = event.target.value;
+    onModeChange(viewMode);
+  };
 
   return (
     <AppBar position="static" className={classes.appBar}>
@@ -62,7 +71,7 @@ const Header: React.FC<Props> = ({ onCollapse }) => {
         >
           {
             Object.keys(VIEW_MODE).map((key: ModeKey) => (
-              <MenuItem key={key} value={VIEW_MODE[key]}>{VIEW_MODE[key]}</MenuItem>
+              <MenuItem key={key} value={key}>{VIEW_MODE[key]}</MenuItem>
             ))
           }
         </Select>
@@ -90,10 +99,6 @@ const Header: React.FC<Props> = ({ onCollapse }) => {
       </Toolbar>
     </AppBar>
   );
-};
-
-Header.propTypes = {
-  onCollapse: PropTypes.func.isRequired,
 };
 
 export default Header;

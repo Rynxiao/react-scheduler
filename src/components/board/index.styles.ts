@@ -1,5 +1,11 @@
+import { grey } from '@app/material/colors';
 import { AugmentedTheme, fade } from '@app/material/styles';
 import { useStyles } from '@app/utils';
+
+export const generateColStyles = (width: number) => ({
+  width,
+  minWidth: width,
+});
 
 const useBoardStyles = useStyles((theme: AugmentedTheme) => ({
   container: {
@@ -9,8 +15,15 @@ const useBoardStyles = useStyles((theme: AugmentedTheme) => ({
   header: {
     overflow: 'hidden',
     backgroundColor: theme.palette.background.default,
+    '& tr > th': {
+      borderRight: `1px solid ${grey['300']}`,
+    },
     '& tr > th:first-child': {
       backgroundColor: theme.palette.background.default,
+      // borderRight: 'none',
+    },
+    '& tr > th:last-child': {
+      borderRight: 'none',
     },
   },
   thead: {
@@ -26,13 +39,22 @@ const useBoardStyles = useStyles((theme: AugmentedTheme) => ({
     '& tr:last-child > td': {
       borderBottom: 'none',
     },
+    '& tr > td': {
+      borderRight: `1px solid ${grey['300']}`,
+    },
     '& tr > td:first-child': {
       backgroundColor: theme.palette.common.white,
+      // borderRight: 'none',
+    },
+    '& tr > td:last-child': {
+      borderRight: 'none',
     },
   },
   stickyCol: {
     position: 'sticky',
     left: 0,
+  },
+  fixedCol: {
     '&::after': {
       position: 'absolute',
       top: 0,

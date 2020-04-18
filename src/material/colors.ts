@@ -1,4 +1,4 @@
 import blue from '@material-ui/core/colors/blue';
-import lightBlue from '@material-ui/core/colors/lightBlue';
+import grey from '@material-ui/core/colors/grey';
 
-export { blue, lightBlue };
+export { blue, grey };

@@ -1,90 +1,63 @@
+import { BoardCol, BoardConfig, Resource } from '@app/components/types';
 import {
   Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
 } from '@app/material/components';
 import classNames from 'classnames';
-import React, { useRef } from 'react';
-import useStyles from './index.styles';
+import React, { useRef, useState } from 'react';
+import useStyles, { generateColStyles } from './index.styles';
 
-const columns = [
-  {
-    title: 'Full Name',
-    width: 100,
-    key: 'name',
-  },
-  {
-    title: 'Age',
-    width: 100,
-    key: 'age',
-  },
-  {
-    title: 'Column 1',
-    key: '1',
-    width: 150,
-  },
-  {
-    title: 'Column 2',
-    key: '2',
-    width: 150,
-  },
-  {
-    title: 'Column 3',
-    key: '3',
-    width: 150,
-  },
-  {
-    title: 'Column 4',
-    key: '4',
-    width: 150,
-  },
-  {
-    title: 'Column 5',
-    key: '5',
-    width: 150,
-  },
-  {
-    title: 'Column 6',
-    key: '6',
-    width: 150,
-  },
-  {
-    title: 'Column 7',
-    key: '7',
-    width: 150,
-  },
-  {
-    title: 'Column 8',
-    key: '8',
-    width: 150,
-  },
-];
-
-const rows: { key: number; name: string; age: number; address: string }[] = [];
-// eslint-disable-next-line no-plusplus
-for (let i = 0; i < 100; i++) {
-  rows.push({
-    key: i,
-    name: `Edrward ${i}`,
-    age: 32,
-    address: `Park no. ${i}`,
-  });
+export interface SchedulerBoardProps {
+  cols: BoardCol[];
+  resourceList?: Resource[];
+  config: BoardConfig;
 }
 
-const SchedulerBoard = () => {
+const SchedulerBoard: React.FC<SchedulerBoardProps> = ({
+  cols,
+  resourceList = [],
+  config,
+}) => {
   const classes = useStyles();
   const headRef = useRef(null);
+  const [shouldShowShadow, setShowShadow] = useState(false);
 
   const renderColGroup = () => (
     <colgroup>
-      {columns.map((column) => (<col key={column.key} width={column.width || 150} />))}
+      {!config.hiddenResourceCol && <col key="resourceCol" style={generateColStyles(config.resourceColWidth)} />}
+      {cols.map((col) => (<col key={col.key} style={generateColStyles(config.colWidth)} />))}
     </colgroup>
   );
 
+  const handleFirstColCellShadowShow = (left: number) => {
+    if (left > 0 && !shouldShowShadow) {
+      setShowShadow(true);
+    } else if (left === 0) {
+      setShowShadow(false);
+    }
+  };
+
   const handleBodyScroll = (event: React.UIEvent<HTMLDivElement, UIEvent>) => {
     const { target } = event;
-    const { scrollLeft } = target as HTMLDivElement;
+    const left = (target as HTMLDivElement).scrollLeft;
     if (headRef && headRef.current) {
-      headRef.current.scrollLeft = scrollLeft;
+      headRef.current.scrollLeft = left;
+      handleFirstColCellShadowShow(left);
     }
+  };
+
+  const renderFirstColCell = (key: string, title: string | React.ReactNode) => {
+    if (!config.hiddenResourceCol) {
+      return (
+        <TableCell
+          key="resourceTitle"
+          className={classNames(classes.stickyCol, { [classes.fixedCol]: shouldShowShadow })}
+          align="center"
+        >
+          {title}
+        </TableCell>
+      );
+    }
+    return null;
   };
 
   return (
@@ -94,14 +67,8 @@ const SchedulerBoard = () => {
           {renderColGroup()}
           <TableHead>
             <TableRow>
-              {columns.map((column, index) => (
-                <TableCell
-                  className={classNames({ [classes.stickyCol]: index === 0 })}
-                  key={column.key}
-                >
-                  {column.title}
-                </TableCell>
-              ))}
+              {renderFirstColCell('resourceTitle', config.resourceTitle)}
+              {cols.map((col) => <TableCell align="center" key={col.key}>{col.title}</TableCell>)}
             </TableRow>
           </TableHead>
         </Table>
@@ -110,20 +77,15 @@ const SchedulerBoard = () => {
         <Table className={classes.tbody}>
           {renderColGroup()}
           <TableBody>
-            {rows.map((row) => (
-              <TableRow key={row.key}>
-                <TableCell className={classes.stickyCol}>{row.name}</TableCell>
-                <TableCell>{row.age}</TableCell>
-                <TableCell>{row.address}</TableCell>
-                <TableCell>{row.address}</TableCell>
-                <TableCell>{row.address}</TableCell>
-                <TableCell>{row.address}</TableCell>
-                <TableCell>{row.address}</TableCell>
-                <TableCell>{row.address}</TableCell>
-                <TableCell>{row.address}</TableCell>
-                <TableCell>{row.address}</TableCell>
-              </TableRow>
-            ))}
+            {resourceList.map((resource) => {
+              const resourceCellContent = resource.render ? resource.render(resource) : resource.name;
+              return (
+                <TableRow key={resource.key}>
+                  {renderFirstColCell(`${resource.key}${resource.name}`, resourceCellContent)}
+                  {cols.map((col) => <TableCell align="center" key={`${resource.key}${col.key}`} />)}
+                </TableRow>
+              );
+            })}
           </TableBody>
         </Table>
       </TableContainer>

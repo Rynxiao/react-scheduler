@@ -1,3 +1,8 @@
+export const DAY = 'DAY';
+export const MONTH = 'MONTH';
+export const QUARTER = 'QUARTER';
+export const YEAR = 'YEAR';
+
 const VIEW_MODE = {
   DAY: 'Day',
   MONTH: 'Month',
@@ -6,5 +11,3 @@ const VIEW_MODE = {
 };
 
 export default VIEW_MODE;
-export type Mode = typeof VIEW_MODE;
-export type ModeKey = keyof Mode;
