@@ -4,7 +4,7 @@ import {
   Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
 } from '@app/material/components';
 import classNames from 'classnames';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import useStyles, { generateCellBorder, generateColStyles } from './index.styles';
 
 export interface SchedulerBoardProps {
@@ -20,7 +20,33 @@ const SchedulerBoard: React.FC<SchedulerBoardProps> = ({
 }) => {
   const classes = useStyles();
   const headRef = useRef(null);
+  const bodyRef = useRef(null);
   const [shouldShowShadow, setShowShadow] = useState(false);
+  const lines = getLines(config);
+
+  const handleFirstColCellShadowShow = (left: number) => {
+    if (left > 0 && !shouldShowShadow) {
+      setShowShadow(true);
+    } else if (left === 0 && shouldShowShadow) {
+      setShowShadow(false);
+    }
+  };
+
+  const scrollElement = (ref: React.MutableRefObject<HTMLDivElement>, left: number) => {
+    const eleRef = ref;
+    if (eleRef && eleRef.current) {
+      setTimeout(() => {
+        eleRef.current.scrollLeft = left;
+      });
+    }
+  };
+
+  useEffect(() => {
+    const initialLeft = lines * config.dayStartFrom * config.dayCellWidth;
+    scrollElement(headRef, initialLeft);
+    scrollElement(bodyRef, initialLeft);
+    handleFirstColCellShadowShow(initialLeft);
+  }, [lines, headRef, bodyRef]);
 
   const renderColGroup = () => (
     <colgroup>
@@ -28,14 +54,6 @@ const SchedulerBoard: React.FC<SchedulerBoardProps> = ({
       {cols.map((col) => (<col key={col.key} style={generateColStyles(col.width)} />))}
     </colgroup>
   );
-
-  const handleFirstColCellShadowShow = (left: number) => {
-    if (left > 0 && !shouldShowShadow) {
-      setShowShadow(true);
-    } else if (left === 0) {
-      setShowShadow(false);
-    }
-  };
 
   const handleBodyScroll = (event: React.UIEvent<HTMLDivElement, UIEvent>) => {
     const { target } = event;
@@ -71,7 +89,7 @@ const SchedulerBoard: React.FC<SchedulerBoardProps> = ({
               {renderFirstColCell('resourceTitle', config.resourceTitle)}
               {cols.map((col, index) => (
                 <TableCell
-                  style={generateCellBorder(config.viewMode, index, getLines(config))}
+                  style={generateCellBorder(config.viewMode, index, lines)}
                   className={classes.headCell}
                   align="center"
                   key={col.key}
@@ -83,7 +101,7 @@ const SchedulerBoard: React.FC<SchedulerBoardProps> = ({
           </TableHead>
         </Table>
       </TableContainer>
-      <TableContainer className={classes.body} onScroll={handleBodyScroll}>
+      <TableContainer className={classes.body} onScroll={handleBodyScroll} ref={bodyRef}>
         <Table className={classes.tbody}>
           {renderColGroup()}
           <TableBody>
