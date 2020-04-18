@@ -1,6 +1,6 @@
 import { DAY } from '@app/components/constants';
 import { BoardConfig, ModeKey } from '@app/components/types';
-import { grey, common } from '@app/material/colors';
+import { grey } from '@app/material/colors';
 import { AugmentedTheme, fade } from '@app/material/styles';
 import { useStyles } from '@app/utils';
 
@@ -16,17 +16,14 @@ export const generateHeaderCellBorder = (viewMode: ModeKey, index: number, lines
   return null;
 };
 
-export const generateBodyCellStyles = (config: BoardConfig, index: number, lines: number) => {
-  const { workingHourStart, workingHourEnd, rowHeight } = config;
-  const styles = { height: `${rowHeight}px` };
+export const isWorkingHour = (config: BoardConfig, index: number, lines: number) => {
+  const { workingHourStart, workingHourEnd } = config;
   if (config.viewMode === DAY) {
     const startIndex = lines * workingHourStart;
     const endIndex = lines * (workingHourEnd + 1);
-    if (index >= startIndex && index < endIndex) {
-      return { ...styles, backgroundColor: common.white };
-    }
+    return index >= startIndex && index < endIndex;
   }
-  return styles;
+  return false;
 };
 
 const useBoardStyles = useStyles((theme: AugmentedTheme) => ({
@@ -63,17 +60,23 @@ const useBoardStyles = useStyles((theme: AugmentedTheme) => ({
     '& tr:last-child > td': {
       borderBottom: 'none',
     },
-    '& tr > td': {
-      backgroundColor: grey['100'],
-      borderRight: `1px solid ${grey['300']}`,
-      padding: 0,
-    },
     '& tr > td:first-child': {
       backgroundColor: theme.palette.common.white,
     },
     '& tr > td:last-child': {
       borderRight: 'none',
     },
+  },
+  bodyCell: {
+    backgroundColor: grey['100'],
+    borderRight: `1px solid ${grey['300']}`,
+    padding: 0,
+    '&:hover': {
+      backgroundColor: grey['200'],
+    },
+  },
+  workingCell: {
+    backgroundColor: theme.palette.common.white,
   },
   stickyCol: {
     position: 'sticky',

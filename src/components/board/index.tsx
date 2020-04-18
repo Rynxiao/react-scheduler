@@ -5,7 +5,11 @@ import {
 } from '@app/material/components';
 import classNames from 'classnames';
 import React, { useEffect, useRef, useState } from 'react';
-import useStyles, { generateHeaderCellBorder, generateColStyles, generateBodyCellStyles } from './index.styles';
+import useStyles, {
+  generateHeaderCellBorder,
+  generateColStyles,
+  isWorkingHour,
+} from './index.styles';
 
 export interface SchedulerBoardProps {
   cols: BoardCol[];
@@ -79,6 +83,10 @@ const SchedulerBoard: React.FC<SchedulerBoardProps> = ({
     return null;
   };
 
+  const handleBodyCellClick = () => {
+    console.log('body cell clicked');
+  };
+
   return (
     <div className={classes.container}>
       <TableContainer className={classes.header} ref={headRef}>
@@ -112,9 +120,13 @@ const SchedulerBoard: React.FC<SchedulerBoardProps> = ({
                   {renderFirstColCell(`${resource.key}${resource.name}`, resourceCellContent)}
                   {cols.map((col, index) => (
                     <TableCell
-                      style={generateBodyCellStyles(config, index, lines)}
+                      style={{ height: `${config.rowHeight}px` }}
+                      className={classNames(classes.bodyCell, {
+                        [classes.workingCell]: isWorkingHour(config, index, lines),
+                      })}
                       align="center"
                       key={`${resource.key}${col.key}`}
+                      onClick={handleBodyCellClick}
                     />
                   ))}
                 </TableRow>

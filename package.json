@@ -32,7 +32,9 @@
     "@material-ui/pickers": "^3.2.10",
     "@material-ui/system": "^4.9.10",
     "classnames": "^2.2.6",
-    "dayjs": "^1.8.24"
+    "dayjs": "^1.8.24",
+    "react-dnd": "^10.0.2",
+    "react-dnd-html5-backend": "^10.0.2"
   },
   "peerDependencies": {
     "prop-types": "^15.7.2",
