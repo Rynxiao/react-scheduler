@@ -12,9 +12,12 @@ const boardConfig = {
   resourceColWidth: 150,
   hiddenResourceCol: false,
 
-  dayStartFrom: 9,
+  dayStartFrom: 0,
   hourInterval: 30,
   dayCellWidth: 50,
+
+  workingHourStart: 9,
+  workingHourEnd: 17,
 };
 
 export default boardConfig;

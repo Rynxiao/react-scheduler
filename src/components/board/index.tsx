@@ -5,7 +5,7 @@ import {
 } from '@app/material/components';
 import classNames from 'classnames';
 import React, { useEffect, useRef, useState } from 'react';
-import useStyles, { generateCellBorder, generateColStyles } from './index.styles';
+import useStyles, { generateHeaderCellBorder, generateColStyles, generateBodyCellStyles } from './index.styles';
 
 export interface SchedulerBoardProps {
   cols: BoardCol[];
@@ -89,7 +89,7 @@ const SchedulerBoard: React.FC<SchedulerBoardProps> = ({
               {renderFirstColCell('resourceTitle', config.resourceTitle)}
               {cols.map((col, index) => (
                 <TableCell
-                  style={generateCellBorder(config.viewMode, index, lines)}
+                  style={generateHeaderCellBorder(config.viewMode, index, lines)}
                   className={classes.headCell}
                   align="center"
                   key={col.key}
@@ -110,9 +110,9 @@ const SchedulerBoard: React.FC<SchedulerBoardProps> = ({
               return (
                 <TableRow key={resource.key}>
                   {renderFirstColCell(`${resource.key}${resource.name}`, resourceCellContent)}
-                  {cols.map((col) => (
+                  {cols.map((col, index) => (
                     <TableCell
-                      style={{ height: `${config.rowHeight}px` }}
+                      style={generateBodyCellStyles(config, index, lines)}
                       align="center"
                       key={`${resource.key}${col.key}`}
                     />

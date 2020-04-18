@@ -1,6 +1,6 @@
 import { DAY } from '@app/components/constants';
-import { ModeKey } from '@app/components/types';
-import { grey } from '@app/material/colors';
+import { BoardConfig, ModeKey } from '@app/components/types';
+import { grey, common } from '@app/material/colors';
 import { AugmentedTheme, fade } from '@app/material/styles';
 import { useStyles } from '@app/utils';
 
@@ -9,11 +9,24 @@ export const generateColStyles = (width: number) => ({
   minWidth: width,
 });
 
-export const generateCellBorder = (viewMode: ModeKey, index: number, lines: number) => {
+export const generateHeaderCellBorder = (viewMode: ModeKey, index: number, lines: number) => {
   if (viewMode === DAY) {
     return index % lines !== lines - 1 ? { borderRight: 'none' } : null;
   }
   return null;
+};
+
+export const generateBodyCellStyles = (config: BoardConfig, index: number, lines: number) => {
+  const { workingHourStart, workingHourEnd, rowHeight } = config;
+  const styles = { height: `${rowHeight}px` };
+  if (config.viewMode === DAY) {
+    const startIndex = lines * workingHourStart;
+    const endIndex = lines * (workingHourEnd + 1);
+    if (index >= startIndex && index < endIndex) {
+      return { ...styles, backgroundColor: common.white };
+    }
+  }
+  return styles;
 };
 
 const useBoardStyles = useStyles((theme: AugmentedTheme) => ({
@@ -51,7 +64,7 @@ const useBoardStyles = useStyles((theme: AugmentedTheme) => ({
       borderBottom: 'none',
     },
     '& tr > td': {
-      backgroundColor: theme.palette.background.default,
+      backgroundColor: grey['100'],
       borderRight: `1px solid ${grey['300']}`,
       padding: 0,
     },
