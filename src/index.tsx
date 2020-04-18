@@ -1,4 +1,5 @@
 import 'dayjs';
+import SchedulerBoard from '@app/components/board';
 import { MuiPickersUtilsProvider } from '@app/material/pickers';
 import { ThemeProvider } from '@app/material/styles';
 import { appTheme } from '@app/utils';
@@ -17,7 +18,9 @@ export default () => {
           <Header onCollapse={() => setSidebar(!sidebar)} />
           <div className={classes.body}>
             <div className={classes.sidebar}>sidebar</div>
-            <div className={classes.content}>content</div>
+            <div className={classes.content}>
+              <SchedulerBoard />
+            </div>
           </div>
         </div>
       </MuiPickersUtilsProvider>
