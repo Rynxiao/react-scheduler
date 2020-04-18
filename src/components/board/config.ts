@@ -1,10 +1,12 @@
-import VIEW_MODE from '@app/components/constants';
+import { DAY } from '@app/components/constants';
+import { ModeKey } from '@app/components/types';
 import dayjs from 'dayjs';
 
-const config = {
-  viewMode: VIEW_MODE.DAY,
+const boardConfig = {
+  viewMode: DAY as ModeKey,
   date: dayjs(),
   colWidth: 100,
+  rowHeight: 68,
 
   resourceTitle: 'Resources',
   resourceColWidth: 150,
@@ -12,6 +14,7 @@ const config = {
 
   dayStartFrom: 9,
   hourInterval: 30,
+  dayCellWidth: 50,
 };
 
-export default config;
+export default boardConfig;

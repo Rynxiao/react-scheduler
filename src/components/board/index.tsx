@@ -4,7 +4,7 @@ import {
 } from '@app/material/components';
 import classNames from 'classnames';
 import React, { useRef, useState } from 'react';
-import useStyles, { generateColStyles } from './index.styles';
+import useStyles, { generateCellBorder, generateColStyles } from './index.styles';
 
 export interface SchedulerBoardProps {
   cols: BoardCol[];
@@ -24,7 +24,7 @@ const SchedulerBoard: React.FC<SchedulerBoardProps> = ({
   const renderColGroup = () => (
     <colgroup>
       {!config.hiddenResourceCol && <col key="resourceCol" style={generateColStyles(config.resourceColWidth)} />}
-      {cols.map((col) => (<col key={col.key} style={generateColStyles(config.colWidth)} />))}
+      {cols.map((col) => (<col key={col.key} style={generateColStyles(col.width)} />))}
     </colgroup>
   );
 
@@ -68,7 +68,16 @@ const SchedulerBoard: React.FC<SchedulerBoardProps> = ({
           <TableHead>
             <TableRow>
               {renderFirstColCell('resourceTitle', config.resourceTitle)}
-              {cols.map((col) => <TableCell align="center" key={col.key}>{col.title}</TableCell>)}
+              {cols.map((col, index) => (
+                <TableCell
+                  style={generateCellBorder(config.viewMode, index)}
+                  className={classes.headCell}
+                  align="center"
+                  key={col.key}
+                >
+                  {col.title}
+                </TableCell>
+              ))}
             </TableRow>
           </TableHead>
         </Table>
@@ -82,7 +91,13 @@ const SchedulerBoard: React.FC<SchedulerBoardProps> = ({
               return (
                 <TableRow key={resource.key}>
                   {renderFirstColCell(`${resource.key}${resource.name}`, resourceCellContent)}
-                  {cols.map((col) => <TableCell align="center" key={`${resource.key}${col.key}`} />)}
+                  {cols.map((col) => (
+                    <TableCell
+                      style={{ height: `${config.rowHeight}px` }}
+                      align="center"
+                      key={`${resource.key}${col.key}`}
+                    />
+                  ))}
                 </TableRow>
               );
             })}

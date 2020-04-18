@@ -1,3 +1,5 @@
+import { DAY } from '@app/components/constants';
+import { ModeKey } from '@app/components/types';
 import { grey } from '@app/material/colors';
 import { AugmentedTheme, fade } from '@app/material/styles';
 import { useStyles } from '@app/utils';
@@ -6,6 +8,13 @@ export const generateColStyles = (width: number) => ({
   width,
   minWidth: width,
 });
+
+export const generateCellBorder = (viewMode: ModeKey, index: number) => {
+  if (viewMode === DAY) {
+    return index % 2 === 0 ? { borderRight: 'none' } : null;
+  }
+  return null;
+};
 
 const useBoardStyles = useStyles((theme: AugmentedTheme) => ({
   container: {
@@ -20,7 +29,6 @@ const useBoardStyles = useStyles((theme: AugmentedTheme) => ({
     },
     '& tr > th:first-child': {
       backgroundColor: theme.palette.background.default,
-      // borderRight: 'none',
     },
     '& tr > th:last-child': {
       borderRight: 'none',
@@ -28,6 +36,10 @@ const useBoardStyles = useStyles((theme: AugmentedTheme) => ({
   },
   thead: {
     tableLayout: 'fixed',
+  },
+  headCell: {
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
   },
   body: {
     height: 'calc(100% - 57px)',
@@ -41,10 +53,10 @@ const useBoardStyles = useStyles((theme: AugmentedTheme) => ({
     },
     '& tr > td': {
       borderRight: `1px solid ${grey['300']}`,
+      padding: 0,
     },
     '& tr > td:first-child': {
       backgroundColor: theme.palette.common.white,
-      // borderRight: 'none',
     },
     '& tr > td:last-child': {
       borderRight: 'none',
