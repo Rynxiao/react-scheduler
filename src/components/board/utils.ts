@@ -25,8 +25,8 @@ const generateDayHours = (lines: number) => {
 
   for (let i = 0; i < counts; i++) {
     let title;
-    if (i % 2 === 0) {
-      const j = Math.floor(i / 2);
+    if (i % lines === 0) {
+      const j = Math.floor(i / lines);
       if (j === 0) {
         title = '12:00 AM';
       } else if (j < middleHour) {
@@ -44,10 +44,14 @@ const generateDayHours = (lines: number) => {
   return hours;
 };
 
+export const getLines = (config: BoardConfig) => {
+  const interval = getInterval(config.hourInterval);
+  return Math.floor(HOUR_MINUTES / interval);
+};
+
 const generateDayHeaders = (config: BoardConfig) => {
   if (!dayHeaders) {
-    const interval = getInterval(config.hourInterval);
-    const lines = Math.floor(HOUR_MINUTES / interval);
+    const lines = getLines(config);
     const dayHourTitles = generateDayHours(lines);
     dayHeaders = dayHourTitles.map((dayHourTitle, index) => ({
       title: dayHourTitle,

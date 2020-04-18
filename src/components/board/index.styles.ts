@@ -9,9 +9,9 @@ export const generateColStyles = (width: number) => ({
   minWidth: width,
 });
 
-export const generateCellBorder = (viewMode: ModeKey, index: number) => {
+export const generateCellBorder = (viewMode: ModeKey, index: number, lines: number) => {
   if (viewMode === DAY) {
-    return index % 2 === 0 ? { borderRight: 'none' } : null;
+    return index % lines !== lines - 1 ? { borderRight: 'none' } : null;
   }
   return null;
 };
@@ -23,12 +23,11 @@ const useBoardStyles = useStyles((theme: AugmentedTheme) => ({
   },
   header: {
     overflow: 'hidden',
-    backgroundColor: theme.palette.background.default,
     '& tr > th': {
       borderRight: `1px solid ${grey['300']}`,
     },
     '& tr > th:first-child': {
-      backgroundColor: theme.palette.background.default,
+      backgroundColor: theme.palette.common.white,
     },
     '& tr > th:last-child': {
       borderRight: 'none',
@@ -52,6 +51,7 @@ const useBoardStyles = useStyles((theme: AugmentedTheme) => ({
       borderBottom: 'none',
     },
     '& tr > td': {
+      backgroundColor: theme.palette.background.default,
       borderRight: `1px solid ${grey['300']}`,
       padding: 0,
     },

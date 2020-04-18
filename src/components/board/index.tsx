@@ -1,3 +1,4 @@
+import { getLines } from '@app/components/board/utils';
 import { BoardCol, BoardConfig, Resource } from '@app/components/types';
 import {
   Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
@@ -70,7 +71,7 @@ const SchedulerBoard: React.FC<SchedulerBoardProps> = ({
               {renderFirstColCell('resourceTitle', config.resourceTitle)}
               {cols.map((col, index) => (
                 <TableCell
-                  style={generateCellBorder(config.viewMode, index)}
+                  style={generateCellBorder(config.viewMode, index, getLines(config))}
                   className={classes.headCell}
                   align="center"
                   key={col.key}
