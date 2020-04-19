@@ -1,7 +1,8 @@
+import eventList from '@app/_mockData/events';
 import generateResourceList from '@app/_mockData/resources';
 import SchedulerBoard from '@app/components/board';
 import boardConfig from '@app/components/board/config';
-import generateColHeaderByMode from '@app/components/board/utils';
+import generateColHeaderByMode from '@app/components/board/utils/main';
 import { MONTH } from '@app/components/constants';
 import { BoardCol, BoardConfig, ModeKey } from '@app/components/types';
 import { MuiPickersUtilsProvider } from '@app/material/pickers';
@@ -60,6 +61,7 @@ const Index: React.FC<SchedulerBoardProps> = ({
                 cols={cols}
                 resourceList={generateResourceList()}
                 config={config}
+                events={eventList}
               />
             </div>
           </div>

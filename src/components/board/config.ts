@@ -12,7 +12,7 @@ const boardConfig = {
   resourceColWidth: 150,
   hiddenResourceCol: false,
 
-  dayStartFrom: 0,
+  dayStartFrom: 8,
   hourInterval: 30,
   dayCellWidth: 50,
 

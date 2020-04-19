@@ -41,6 +41,7 @@ const useBoardStyles = useStyles((theme: AugmentedTheme) => ({
     whiteSpace: 'nowrap',
   },
   body: {
+    position: 'relative',
     height: 'calc(100% - 57px)',
     overflow: 'auto',
   },
@@ -52,6 +53,7 @@ const useBoardStyles = useStyles((theme: AugmentedTheme) => ({
     },
     '& tr > td:first-child': {
       backgroundColor: theme.palette.common.white,
+      zIndex: theme.zIndex.modal,
     },
     '& tr > td:last-child': {
       borderRight: 'none',
@@ -86,6 +88,26 @@ const useBoardStyles = useStyles((theme: AugmentedTheme) => ({
       pointerEvents: 'none',
       boxShadow: `inset 10px 0 8px -8px ${fade(theme.palette.common.black, 0.15)}`,
     },
+  },
+
+  eventBoard: {
+    position: 'absolute',
+    left: 0,
+    top: 0,
+  },
+  eventItemWrapper: {
+    position: 'absolute',
+    backgroundColor: theme.palette.primary.main,
+    color: theme.palette.common.white,
+    borderRadius: theme.shape.borderRadius,
+    padding: theme.spacing(0.5),
+    boxSizing: 'border-box',
+    boxShadow: theme.shadows[2],
+  },
+  eventItem: {
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
   },
 }));
 

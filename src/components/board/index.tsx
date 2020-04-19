@@ -1,5 +1,6 @@
-import { getLines } from '@app/components/board/utils';
-import { BoardCol, BoardConfig, Resource } from '@app/components/types';
+import EventBoard from '@app/components/board/components/event';
+import { getLines } from '@app/components/board/utils/main';
+import { BoardCol, BoardConfig, BoardEvent, Resource } from '@app/components/types';
 import { TableCell, TableContainer } from '@app/material/components';
 import classNames from 'classnames';
 import React, { useEffect, useRef, useState } from 'react';
@@ -10,6 +11,7 @@ import useStyles, { generateColStyles } from './index.styles';
 export interface SchedulerBoardProps {
   cols: BoardCol[];
   resourceList?: Resource[];
+  events: BoardEvent[];
   config: BoardConfig;
 }
 
@@ -17,6 +19,7 @@ const SchedulerBoard: React.FC<SchedulerBoardProps> = ({
   cols,
   resourceList = [],
   config,
+  events = [],
 }) => {
   const classes = useStyles();
   const headRef = useRef(null);
@@ -103,7 +106,7 @@ const SchedulerBoard: React.FC<SchedulerBoardProps> = ({
           renderFirstColCell={(key, content) => renderFirstColCell(key, content)}
           lines={lines}
         />
-        <div className={classes.eventBoard}>event board</div>
+        <EventBoard config={config} resourceList={resourceList} lines={lines} events={events} />
       </TableContainer>
     </div>
   );

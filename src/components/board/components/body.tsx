@@ -5,7 +5,7 @@ import {
 import classNames from 'classnames';
 import React from 'react';
 import useStyles from '../index.styles';
-import { isWorkingHour } from '../utils';
+import { isWorkingHour } from '../utils/main';
 
 interface BoardBodyProps {
   cols: BoardCol[];

@@ -10,4 +10,11 @@ const VIEW_MODE = {
   YEAR: 'Year',
 };
 
+export const DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
+export const TIME_FORMAT = 'HH:mm';
+
+export const HOUR_MINUTES = 60;
+export const DAY_HOURS = 24;
+export const MINUTE_UNIT = 'minute';
+
 export default VIEW_MODE;

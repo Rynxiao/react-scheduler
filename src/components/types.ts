@@ -20,11 +20,11 @@ export interface Resource {
   render?(resource: Resource): React.ReactNode;
 }
 
-export interface Event {
+export interface BoardEvent {
   id: string;
   startDate: string;
   endDate: string;
   rId: string;
   [key: string]: unknown;
-  render?(event: Event): React.ReactNode;
+  render?(event: BoardEvent): React.ReactNode;
 }

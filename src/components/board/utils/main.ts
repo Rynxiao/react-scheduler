@@ -1,11 +1,10 @@
-import {
-  DAY, MONTH, QUARTER, YEAR,
-} from '@app/components/constants';
+import { DAY, DAY_HOURS, HOUR_MINUTES, MONTH, QUARTER, YEAR } from '@app/components/constants';
 import { BoardCol, BoardConfig, ModeKey } from '@app/components/types';
 
-const HOUR_MINUTES = 60;
-const DAY_HOURS = 24;
 let dayHeaders: BoardCol[];
+
+export const isDayViewMode = (config: BoardConfig) => config.viewMode === DAY;
+export const isMonthViewMode = (config: BoardConfig) => config.viewMode === MONTH;
 
 const getInterval = (hourInterval: number) => {
   let interval = hourInterval;
@@ -94,7 +93,7 @@ const generateColHeaderByMode = (viewMode: ModeKey, config: BoardConfig) => {
 
 export const isWorkingHour = (config: BoardConfig, index: number, lines: number) => {
   const { workingHourStart, workingHourEnd } = config;
-  if (config.viewMode === DAY) {
+  if (isDayViewMode(config)) {
     const startIndex = lines * workingHourStart;
     const endIndex = lines * (workingHourEnd + 1);
     return index >= startIndex && index < endIndex;
