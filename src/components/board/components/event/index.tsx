@@ -10,7 +10,6 @@ interface EventBoardProps {
   width: number;
   config: BoardConfig;
   events: BoardEvent[];
-  bodyRef: React.MutableRefObject<HTMLDivElement>;
   onEventsChange(events: BoardEvent[]): void;
 }
 
@@ -18,18 +17,18 @@ const EventBoard: React.FC<EventBoardProps> = ({
   width,
   events,
   config,
-  bodyRef,
   onEventsChange,
 }) => {
   const classes = useStyles();
   const [, drop] = useDrop({
     accept: ITEM_TYPES.EVENT,
     drop(item, monitor) {
-      const clientOffset = monitor.getClientOffset();
+      const diffOffset = monitor.getDifferenceFromInitialOffset();
       const itemInfo = monitor.getItem();
-      const droppedOffset = getDroppedOffset(bodyRef, clientOffset, config);
+      const dragEvent = itemInfo.event;
+      const droppedOffset = getDroppedOffset(diffOffset, config, dragEvent);
       const newEvents = events.map((event) => {
-        if (event.id === itemInfo.id) {
+        if (event.id === dragEvent.id) {
           return { ...event, left: droppedOffset.x, top: droppedOffset.y };
         }
         return event;

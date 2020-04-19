@@ -14,7 +14,7 @@ interface EventItemProps {
 const EventItem: React.FC<EventItemProps> = ({ event, style }) => {
   const classes = useStyles();
   const [{ isDragging }, drag] = useDrag({
-    item: { type: ITEM_TYPES.EVENT, id: event.id },
+    item: { type: ITEM_TYPES.EVENT, event },
     collect: (monitor) => ({
       isDragging: !!monitor.isDragging(),
     }),

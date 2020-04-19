@@ -1,7 +1,6 @@
 import { DAY_HOURS, HOUR_MINUTES, MINUTE_UNIT, TIME_FORMAT } from '@app/components/constants';
 import { BoardConfig, BoardEvent, Resource } from '@app/components/types';
 import dayjs, { Dayjs } from 'dayjs';
-import React from 'react';
 import { XYCoord } from 'react-dnd';
 import { isDayViewMode, isMonthViewMode } from './main';
 
@@ -57,34 +56,20 @@ export const getMatchedEvents = (events: BoardEvent[], config: BoardConfig) => {
   return [];
 };
 
-export const getRelativeOffset = (
-  bodyRef: React.MutableRefObject<HTMLDivElement>,
-  clientOffset: XYCoord,
-  config: BoardConfig,
-) => {
-  const bodyEle = bodyRef.current;
-  const { scrollLeft, scrollTop } = bodyEle;
-  const bodyClientOffset = bodyEle.getBoundingClientRect();
-  const clientX = clientOffset.x;
-  const clientY = clientOffset.y;
-  const bodyClientX = bodyClientOffset.x;
-  const bodyClientY = bodyClientOffset.y;
-  let x = clientX - bodyClientX + scrollLeft;
-  if (!config.hiddenResourceCol) {
-    x -= config.resourceColWidth;
-  }
-  const y = clientY - bodyClientY + scrollTop;
-  return { x, y };
-};
+export const getDroppedOffset = (offset: XYCoord, config: BoardConfig, event: BoardEvent) => {
+  const { dayCellWidth, rowHeight, colWidth } = config;
+  let offsetX = offset.x + Number(event.left);
+  let offsetY = offset.y + Number(event.top);
+  offsetX = offsetX > 0 ? offsetX : 0;
+  offsetY = offsetY > 0 ? offsetY : 0;
 
-export const getDroppedOffset = (
-  bodyRef: React.MutableRefObject<HTMLDivElement>,
-  clientOffset: XYCoord,
-  config: BoardConfig,
-) => {
-  const { dayCellWidth, rowHeight } = config;
-  const offset = getRelativeOffset(bodyRef, clientOffset, config);
-  const left = Math.floor(offset.x / dayCellWidth) * dayCellWidth;
-  const top = Math.floor(offset.y / rowHeight) * rowHeight;
-  return { x: left, y: top };
+  let x = offsetX;
+  const y = Math.floor(offsetY / rowHeight) * (rowHeight + 1);
+
+  if (isMonthViewMode(config)) {
+    x = Math.floor(offsetX / colWidth) * colWidth;
+  } else if (isDayViewMode(config)) {
+    x = Math.floor(offsetX / dayCellWidth) * dayCellWidth;
+  }
+  return { x, y };
 };

@@ -115,7 +115,6 @@ const SchedulerBoard: React.FC<SchedulerBoardProps> = ({
           lines={lines}
         />
         <EventBoard
-          bodyRef={bodyRef}
           width={boardWidth}
           config={config}
           events={getMatchedEvents(events, config)}
