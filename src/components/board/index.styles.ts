@@ -81,6 +81,7 @@ const useBoardStyles = useStyles((theme: AugmentedTheme) => ({
   stickyCol: {
     position: 'sticky',
     left: 0,
+    borderRight: `1px solid ${grey['300']}`,
   },
   fixedCol: {
     '&::after': {
