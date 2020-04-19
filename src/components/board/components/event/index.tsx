@@ -1,8 +1,9 @@
-import { getDayTime, getEventStyles } from '@app/components/board/utils';
+import { getEventStyles } from '@app/components/board/utils';
 import { BoardConfig, BoardEvent, Resource } from '@app/components/types';
-import { Box, Typography } from '@app/material/components';
+import { Box } from '@app/material/components';
 import React from 'react';
-import useStyles from '../../index.styles';
+import EventItem from './eventItem';
+import useStyles from './index.styles';
 
 interface EventBoardProps {
   config: BoardConfig;
@@ -20,22 +21,15 @@ const EventBoard: React.FC<EventBoardProps> = ({
   const classes = useStyles();
   return (
     <div className={classes.eventBoard}>
-      { events.map((event) => (
+      {events.map((event) => (
         <Box
           className={classes.eventItemWrapper}
           style={getEventStyles(event, lines, config, resourceList)}
           key={event.id}
         >
-          {
-            event.render ? event.render(event) : (
-              <div className={classes.eventItem}>
-                <Typography variant="subtitle2">{event.title}</Typography>
-                <Typography variant="caption">{`${getDayTime(event.startDate)}-${getDayTime(event.endDate)}`}</Typography>
-              </div>
-            )
-          }
+          {event.render ? event.render(event) : <EventItem event={event} />}
         </Box>
-      )) }
+      ))}
     </div>
   );
 };

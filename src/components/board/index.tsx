@@ -1,4 +1,5 @@
 import EventBoard from '@app/components/board/components/event';
+import { getMatchedEvents } from '@app/components/board/utils';
 import { getLines } from '@app/components/board/utils/main';
 import { BoardCol, BoardConfig, BoardEvent, Resource } from '@app/components/types';
 import { TableCell, TableContainer } from '@app/material/components';
@@ -106,7 +107,12 @@ const SchedulerBoard: React.FC<SchedulerBoardProps> = ({
           renderFirstColCell={(key, content) => renderFirstColCell(key, content)}
           lines={lines}
         />
-        <EventBoard config={config} resourceList={resourceList} lines={lines} events={events} />
+        <EventBoard
+          config={config}
+          resourceList={resourceList}
+          lines={lines}
+          events={getMatchedEvents(events, config)}
+        />
       </TableContainer>
     </div>
   );
