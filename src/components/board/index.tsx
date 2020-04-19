@@ -1,15 +1,11 @@
 import { getLines } from '@app/components/board/utils';
 import { BoardCol, BoardConfig, Resource } from '@app/components/types';
-import {
-  Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
-} from '@app/material/components';
+import { TableCell, TableContainer } from '@app/material/components';
 import classNames from 'classnames';
 import React, { useEffect, useRef, useState } from 'react';
-import useStyles, {
-  generateHeaderCellBorder,
-  generateColStyles,
-  isWorkingHour,
-} from './index.styles';
+import SchedulerBoardBody from './components/body';
+import SchedulerBoardHeader from './components/header';
+import useStyles, { generateColStyles } from './index.styles';
 
 export interface SchedulerBoardProps {
   cols: BoardCol[];
@@ -83,57 +79,26 @@ const SchedulerBoard: React.FC<SchedulerBoardProps> = ({
     return null;
   };
 
-  const handleBodyCellClick = () => {
-    console.log('body cell clicked');
-  };
-
   return (
     <div className={classes.container}>
       <TableContainer className={classes.header} ref={headRef}>
-        <Table className={classes.thead}>
-          {renderColGroup()}
-          <TableHead>
-            <TableRow>
-              {renderFirstColCell('resourceTitle', config.resourceTitle)}
-              {cols.map((col, index) => (
-                <TableCell
-                  style={generateHeaderCellBorder(config.viewMode, index, lines)}
-                  className={classes.headCell}
-                  align="center"
-                  key={col.key}
-                >
-                  {col.title}
-                </TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-        </Table>
+        <SchedulerBoardHeader
+          cols={cols}
+          config={config}
+          colGroups={renderColGroup()}
+          firstCollCell={renderFirstColCell('resourceTitle', config.resourceTitle)}
+          lines={lines}
+        />
       </TableContainer>
       <TableContainer className={classes.body} onScroll={handleBodyScroll} ref={bodyRef}>
-        <Table className={classes.tbody}>
-          {renderColGroup()}
-          <TableBody>
-            {resourceList.map((resource) => {
-              const resourceCellContent = resource.render ? resource.render(resource) : resource.name;
-              return (
-                <TableRow key={resource.id}>
-                  {renderFirstColCell(`${resource.id}${resource.name}`, resourceCellContent)}
-                  {cols.map((col, index) => (
-                    <TableCell
-                      style={{ height: `${config.rowHeight}px` }}
-                      className={classNames(classes.bodyCell, {
-                        [classes.workingCell]: isWorkingHour(config, index, lines),
-                      })}
-                      align="center"
-                      key={`${resource.id}${col.key}`}
-                      onClick={handleBodyCellClick}
-                    />
-                  ))}
-                </TableRow>
-              );
-            })}
-          </TableBody>
-        </Table>
+        <SchedulerBoardBody
+          cols={cols}
+          config={config}
+          colGroups={renderColGroup()}
+          resourceList={resourceList}
+          renderFirstColCell={(key, content) => renderFirstColCell(key, content)}
+          lines={lines}
+        />
       </TableContainer>
     </div>
   );
