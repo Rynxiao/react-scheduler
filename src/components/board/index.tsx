@@ -1,5 +1,5 @@
 import EventBoard from '@app/components/board/components/event';
-import { getMatchedEvents } from '@app/components/board/utils';
+import { getBoardWidth, getEventItemStyleProps, getMatchedEvents } from '@app/components/board/utils';
 import { getLines } from '@app/components/board/utils/main';
 import { BoardCol, BoardConfig, BoardEvent, Resource } from '@app/components/types';
 import { TableCell, TableContainer } from '@app/material/components';
@@ -14,6 +14,7 @@ export interface SchedulerBoardProps {
   resourceList?: Resource[];
   events: BoardEvent[];
   config: BoardConfig;
+  onEventsChange(events: BoardEvent[]): void;
 }
 
 const SchedulerBoard: React.FC<SchedulerBoardProps> = ({
@@ -21,12 +22,22 @@ const SchedulerBoard: React.FC<SchedulerBoardProps> = ({
   resourceList = [],
   config,
   events = [],
+  onEventsChange,
 }) => {
   const classes = useStyles();
   const headRef = useRef(null);
   const bodyRef = useRef(null);
   const [shouldShowShadow, setShowShadow] = useState(false);
   const lines = getLines(config);
+  const boardWidth = getBoardWidth(cols);
+
+  useEffect(() => {
+    const eventsWidthStyleProps = events.map((event) => {
+      const eventItemStyleProps = getEventItemStyleProps(event, lines, config, resourceList);
+      return { ...event, ...eventItemStyleProps };
+    });
+    onEventsChange(eventsWidthStyleProps);
+  }, []);
 
   const handleFirstColCellShadowShow = (left: number) => {
     if (left > 0 && !shouldShowShadow) {
@@ -94,11 +105,7 @@ const SchedulerBoard: React.FC<SchedulerBoardProps> = ({
           lines={lines}
         />
       </TableContainer>
-      <TableContainer
-        className={classes.body}
-        onScroll={handleBodyScroll}
-        ref={bodyRef}
-      >
+      <TableContainer className={classes.body} onScroll={handleBodyScroll} ref={bodyRef}>
         <SchedulerBoardBody
           cols={cols}
           config={config}
@@ -108,10 +115,11 @@ const SchedulerBoard: React.FC<SchedulerBoardProps> = ({
           lines={lines}
         />
         <EventBoard
+          bodyRef={bodyRef}
+          width={boardWidth}
           config={config}
-          resourceList={resourceList}
-          lines={lines}
           events={getMatchedEvents(events, config)}
+          onEventsChange={onEventsChange}
         />
       </TableContainer>
     </div>

@@ -20,11 +20,25 @@ export interface Resource {
   render?(resource: Resource): React.ReactNode;
 }
 
-export interface BoardEvent {
+export type PositionedItemTypes = {
+  width: number | string;
+  height: number | string;
+  left: number | string;
+  top: number | string;
+};
+
+export interface BoardEvent extends Partial<PositionedItemTypes> {
   id: string;
   startDate: string;
   endDate: string;
   rId: string;
   [key: string]: unknown;
   render?(event: BoardEvent): React.ReactNode;
+}
+
+export interface DroppedEventItem {
+  id: string;
+  type: string;
+  x: number;
+  y: number;
 }

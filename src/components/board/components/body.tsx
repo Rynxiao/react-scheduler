@@ -1,7 +1,5 @@
 import { BoardCol, BoardConfig, Resource } from '@app/components/types';
-import {
-  Table, TableBody, TableCell, TableRow,
-} from '@app/material/components';
+import { Table, TableBody, TableCell, TableRow } from '@app/material/components';
 import classNames from 'classnames';
 import React from 'react';
 import useStyles from '../index.styles';

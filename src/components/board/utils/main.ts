@@ -2,6 +2,8 @@ import { DAY, DAY_HOURS, HOUR_MINUTES, MONTH, QUARTER, YEAR } from '@app/compone
 import { BoardCol, BoardConfig, ModeKey } from '@app/components/types';
 
 let dayHeaders: BoardCol[];
+let linesInCol: number;
+let boardWidth: number;
 
 export const isDayViewMode = (config: BoardConfig) => config.viewMode === DAY;
 export const isMonthViewMode = (config: BoardConfig) => config.viewMode === MONTH;
@@ -44,8 +46,18 @@ const generateDayHours = (lines: number) => {
 };
 
 export const getLines = (config: BoardConfig) => {
-  const interval = getInterval(config.hourInterval);
-  return Math.floor(HOUR_MINUTES / interval);
+  if (!linesInCol) {
+    const interval = getInterval(config.hourInterval);
+    return Math.floor(HOUR_MINUTES / interval);
+  }
+  return linesInCol;
+};
+
+export const getBoardWidth = (cols: BoardCol[]) => {
+  if (!boardWidth) {
+    return cols.reduce((width, col) => width + col.width, 0);
+  }
+  return boardWidth;
 };
 
 const generateDayHeaders = (config: BoardConfig) => {

@@ -1,6 +1,8 @@
 import { DAY_HOURS, HOUR_MINUTES, MINUTE_UNIT, TIME_FORMAT } from '@app/components/constants';
 import { BoardConfig, BoardEvent, Resource } from '@app/components/types';
 import dayjs, { Dayjs } from 'dayjs';
+import React from 'react';
+import { XYCoord } from 'react-dnd';
 import { isDayViewMode, isMonthViewMode } from './main';
 
 export const getHours = (startDate: Dayjs, endDate: Dayjs) => {
@@ -10,7 +12,7 @@ export const getHours = (startDate: Dayjs, endDate: Dayjs) => {
 
 export const getDayTime = (date: string) => dayjs(date).format(TIME_FORMAT);
 
-export const getEventStyles = (
+export const getEventItemStyleProps = (
   event: BoardEvent,
   lines: number,
   config: BoardConfig,
@@ -42,7 +44,7 @@ export const getEventStyles = (
       left = resourceColWidth + left;
     }
   }
-  return { left: `${left}px`, top: `${top}px`, width: `${width}px`, height: `${rowHeight}px` };
+  return { left, top, width, height: rowHeight };
 };
 
 export const getMatchedEvents = (events: BoardEvent[], config: BoardConfig) => {
@@ -53,4 +55,36 @@ export const getMatchedEvents = (events: BoardEvent[], config: BoardConfig) => {
     return events.filter((event) => dayjs(event.startDate).month() === config.date.month());
   }
   return [];
+};
+
+export const getRelativeOffset = (
+  bodyRef: React.MutableRefObject<HTMLDivElement>,
+  clientOffset: XYCoord,
+  config: BoardConfig,
+) => {
+  const bodyEle = bodyRef.current;
+  const { scrollLeft, scrollTop } = bodyEle;
+  const bodyClientOffset = bodyEle.getBoundingClientRect();
+  const clientX = clientOffset.x;
+  const clientY = clientOffset.y;
+  const bodyClientX = bodyClientOffset.x;
+  const bodyClientY = bodyClientOffset.y;
+  let x = clientX - bodyClientX + scrollLeft;
+  if (!config.hiddenResourceCol) {
+    x -= config.resourceColWidth;
+  }
+  const y = clientY - bodyClientY + scrollTop;
+  return { x, y };
+};
+
+export const getDroppedOffset = (
+  bodyRef: React.MutableRefObject<HTMLDivElement>,
+  clientOffset: XYCoord,
+  config: BoardConfig,
+) => {
+  const { dayCellWidth, rowHeight } = config;
+  const offset = getRelativeOffset(bodyRef, clientOffset, config);
+  const left = Math.floor(offset.x / dayCellWidth) * dayCellWidth;
+  const top = Math.floor(offset.y / rowHeight) * rowHeight;
+  return { x: left, y: top };
 };

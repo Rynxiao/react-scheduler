@@ -4,13 +4,15 @@ import SchedulerBoard from '@app/components/board';
 import boardConfig from '@app/components/board/config';
 import generateColHeaderByMode from '@app/components/board/utils/main';
 import { MONTH } from '@app/components/constants';
-import { BoardCol, BoardConfig, ModeKey } from '@app/components/types';
+import { BoardCol, BoardConfig, BoardEvent, ModeKey } from '@app/components/types';
 import { MuiPickersUtilsProvider } from '@app/material/pickers';
 import { ThemeProvider } from '@app/material/styles';
 import { appTheme } from '@app/utils';
 import DayjsUtils from '@date-io/dayjs';
 import { Dayjs } from 'dayjs';
 import React, { useEffect, useState } from 'react';
+import { DndProvider } from 'react-dnd';
+import Backend from 'react-dnd-html5-backend';
 import Header from './components/header';
 import useIndexStyles, { sidebarStyles } from './index.styles';
 
@@ -24,6 +26,7 @@ const Index: React.FC<SchedulerBoardProps> = ({
   const [hasSidebar, setSidebar] = useState(true);
   const [config, setConfig] = React.useState<BoardConfig>({ ...boardConfig, ...options });
   const [cols, setCols] = React.useState<BoardCol[]>([]);
+  const [events, setEvents] = React.useState<BoardEvent[]>(eventList);
   const classes = useIndexStyles(sidebarStyles(hasSidebar, appTheme));
 
   useEffect(() => {
@@ -43,6 +46,8 @@ const Index: React.FC<SchedulerBoardProps> = ({
     setConfig(newConfig);
   };
 
+  const handleEventsChange = (boardEvents: BoardEvent[]) => setEvents(boardEvents);
+
   return (
     <ThemeProvider theme={appTheme}>
       <MuiPickersUtilsProvider utils={DayjsUtils}>
@@ -54,17 +59,20 @@ const Index: React.FC<SchedulerBoardProps> = ({
             selectedDate={config.date}
             onSelectDate={handleDateChange}
           />
-          <div className={classes.body}>
-            <div className={classes.sidebar}>sidebar</div>
-            <div className={classes.content}>
-              <SchedulerBoard
-                cols={cols}
-                resourceList={generateResourceList()}
-                config={config}
-                events={eventList}
-              />
+          <DndProvider backend={Backend}>
+            <div className={classes.body}>
+              <div className={classes.sidebar}>sidebar</div>
+              <div className={classes.content}>
+                <SchedulerBoard
+                  cols={cols}
+                  resourceList={generateResourceList()}
+                  config={config}
+                  events={events}
+                  onEventsChange={handleEventsChange}
+                />
+              </div>
             </div>
-          </div>
+          </DndProvider>
         </div>
       </MuiPickersUtilsProvider>
     </ThemeProvider>
