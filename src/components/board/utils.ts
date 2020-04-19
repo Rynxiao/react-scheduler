@@ -92,4 +92,14 @@ const generateColHeaderByMode = (viewMode: ModeKey, config: BoardConfig) => {
   }
 };
 
+export const isWorkingHour = (config: BoardConfig, index: number, lines: number) => {
+  const { workingHourStart, workingHourEnd } = config;
+  if (config.viewMode === DAY) {
+    const startIndex = lines * workingHourStart;
+    const endIndex = lines * (workingHourEnd + 1);
+    return index >= startIndex && index < endIndex;
+  }
+  return false;
+};
+
 export default generateColHeaderByMode;

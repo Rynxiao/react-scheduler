@@ -90,7 +90,11 @@ const SchedulerBoard: React.FC<SchedulerBoardProps> = ({
           lines={lines}
         />
       </TableContainer>
-      <TableContainer className={classes.body} onScroll={handleBodyScroll} ref={bodyRef}>
+      <TableContainer
+        className={classes.body}
+        onScroll={handleBodyScroll}
+        ref={bodyRef}
+      >
         <SchedulerBoardBody
           cols={cols}
           config={config}
@@ -99,6 +103,7 @@ const SchedulerBoard: React.FC<SchedulerBoardProps> = ({
           renderFirstColCell={(key, content) => renderFirstColCell(key, content)}
           lines={lines}
         />
+        <div className={classes.eventBoard}>event board</div>
       </TableContainer>
     </div>
   );

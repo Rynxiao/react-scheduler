@@ -4,7 +4,8 @@ import {
 } from '@app/material/components';
 import classNames from 'classnames';
 import React from 'react';
-import useStyles, { isWorkingHour } from '../index.styles';
+import useStyles from '../index.styles';
+import { isWorkingHour } from '../utils';
 
 interface BoardBodyProps {
   cols: BoardCol[];

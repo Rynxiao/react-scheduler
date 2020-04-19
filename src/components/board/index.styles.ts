@@ -1,5 +1,5 @@
 import { DAY } from '@app/components/constants';
-import { BoardConfig, ModeKey } from '@app/components/types';
+import { ModeKey } from '@app/components/types';
 import { grey } from '@app/material/colors';
 import { AugmentedTheme, fade } from '@app/material/styles';
 import { useStyles } from '@app/utils';
@@ -14,16 +14,6 @@ export const generateHeaderCellBorder = (viewMode: ModeKey, index: number, lines
     return index % lines !== lines - 1 ? { borderRight: 'none' } : null;
   }
   return null;
-};
-
-export const isWorkingHour = (config: BoardConfig, index: number, lines: number) => {
-  const { workingHourStart, workingHourEnd } = config;
-  if (config.viewMode === DAY) {
-    const startIndex = lines * workingHourStart;
-    const endIndex = lines * (workingHourEnd + 1);
-    return index >= startIndex && index < endIndex;
-  }
-  return false;
 };
 
 const useBoardStyles = useStyles((theme: AugmentedTheme) => ({
