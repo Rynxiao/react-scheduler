@@ -1,13 +1,13 @@
-import ITEM_TYPES from '@app/components/board/components/event/constants';
-import { getDroppedOffset } from '@app/components/board/utils';
-import { BoardConfig, BoardEvent } from '@app/components/types';
+import EventDropCell from '@app/components/board/components/event/eventDropCell';
+import { getEventItem } from '@app/components/board/utils';
+import { BoardCol, BoardConfig, BoardEvent, Resource } from '@app/components/types';
 import React from 'react';
-import { useDrop } from 'react-dnd';
-import EventItem from './eventItem';
 import useStyles, { generateEventBoardStyles } from './index.styles';
 
 interface EventBoardProps {
   width: number;
+  cols: BoardCol[];
+  resourceList: Resource[];
   config: BoardConfig;
   events: BoardEvent[];
   onEventsChange(events: BoardEvent[]): void;
@@ -15,49 +15,27 @@ interface EventBoardProps {
 
 const EventBoard: React.FC<EventBoardProps> = ({
   width,
+  cols,
+  resourceList,
   events,
   config,
-  onEventsChange,
 }) => {
   const classes = useStyles();
-  const [, drop] = useDrop({
-    accept: ITEM_TYPES.EVENT,
-    drop(item, monitor) {
-      const diffOffset = monitor.getDifferenceFromInitialOffset();
-      const itemInfo = monitor.getItem();
-      const dragEvent = itemInfo.event;
-      const droppedOffset = getDroppedOffset(diffOffset, config, dragEvent);
-      const newEvents = events.map((event) => {
-        if (event.id === dragEvent.id) {
-          return { ...event, left: droppedOffset.x, top: droppedOffset.y };
-        }
-        return event;
-      });
-      onEventsChange(newEvents);
-    },
-  });
-
   return (
     <div
-      ref={drop}
       className={classes.eventBoard}
       style={generateEventBoardStyles(width, config)}
     >
-      {events.map((event) => {
-        const eventItemStyle = {
-          width: `${event.width}px`,
-          height: `${event.height}px`,
-          left: `${event.left}px`,
-          top: `${event.top}px`,
-        };
-        return (
-          <EventItem
-            key={event.id}
-            event={event}
-            style={eventItemStyle}
-          />
-        );
-      })}
+      {resourceList.map((resource) => (
+        <div key={`event${resource.id}`} style={{ height: `${config.rowHeight + 1}px` }}>
+          {
+            cols.map((col) => {
+              const cellEvents = getEventItem(col, resource, events, config);
+              return <EventDropCell key={`event${col.key}`} col={col} config={config} cellEvents={cellEvents} />;
+            })
+          }
+        </div>
+      ))}
     </div>
   );
 };

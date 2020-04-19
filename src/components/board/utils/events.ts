@@ -1,8 +1,7 @@
-import { DAY_HOURS, HOUR_MINUTES, MINUTE_UNIT, TIME_FORMAT } from '@app/components/constants';
-import { BoardConfig, BoardEvent, Resource } from '@app/components/types';
+import { DAY_FORMAT, DAY_HOURS, HOUR_MINUTES, MINUTE_UNIT, TIME_FORMAT } from '@app/components/constants';
+import { BoardCol, BoardConfig, BoardEvent, Resource } from '@app/components/types';
 import dayjs, { Dayjs } from 'dayjs';
-import { XYCoord } from 'react-dnd';
-import { isDayViewMode, isMonthViewMode } from './main';
+import { getLines, isDayViewMode, isMonthViewMode } from './main';
 
 export const getHours = (startDate: Dayjs, endDate: Dayjs) => {
   const hours = Number((endDate.diff(startDate, MINUTE_UNIT) / HOUR_MINUTES).toFixed(1));
@@ -11,39 +10,24 @@ export const getHours = (startDate: Dayjs, endDate: Dayjs) => {
 
 export const getDayTime = (date: string) => dayjs(date).format(TIME_FORMAT);
 
-export const getEventItemStyleProps = (
-  event: BoardEvent,
-  lines: number,
-  config: BoardConfig,
-  resources: Resource[],
-) => {
-  const { dayCellWidth, rowHeight, hiddenResourceCol, resourceColWidth, colWidth } = config;
-  const resourceIndex = resources.findIndex((resource) => resource.id === event.rId);
-  const top = resourceIndex * (rowHeight + 1);
+export const calculateEventCellStyleByDuration = (event: BoardEvent, config: BoardConfig) => {
+  const { dayCellWidth, rowHeight, colWidth } = config;
+  const lines = getLines(config);
   const start = dayjs(event.startDate);
   const end = dayjs(event.endDate);
-  let left;
   let width;
   if (isDayViewMode(config)) {
     const duration = getHours(start, end);
-    left = start.hour() * lines * dayCellWidth;
     width = duration * lines * dayCellWidth;
-    if (!hiddenResourceCol) {
-      left = resourceColWidth + left;
-    }
   } else if (isMonthViewMode(config)) {
     const startDay = start.day();
     const endDay = end.day();
     const daysInMonth = start.daysInMonth();
     let duration = startDay - endDay;
     duration = duration > daysInMonth ? daysInMonth : duration;
-    left = startDay * colWidth;
     width = (duration + 1) * colWidth;
-    if (!hiddenResourceCol) {
-      left = resourceColWidth + left;
-    }
   }
-  return { left, top, width, height: rowHeight };
+  return { width, height: rowHeight };
 };
 
 export const getMatchedEvents = (events: BoardEvent[], config: BoardConfig) => {
@@ -56,20 +40,16 @@ export const getMatchedEvents = (events: BoardEvent[], config: BoardConfig) => {
   return [];
 };
 
-export const getDroppedOffset = (offset: XYCoord, config: BoardConfig, event: BoardEvent) => {
-  const { dayCellWidth, rowHeight, colWidth } = config;
-  let offsetX = offset.x + Number(event.left);
-  let offsetY = offset.y + Number(event.top);
-  offsetX = offsetX > 0 ? offsetX : 0;
-  offsetY = offsetY > 0 ? offsetY : 0;
-
-  let x = offsetX;
-  const y = Math.floor(offsetY / rowHeight) * (rowHeight + 1);
-
-  if (isMonthViewMode(config)) {
-    x = Math.floor(offsetX / colWidth) * colWidth;
-  } else if (isDayViewMode(config)) {
-    x = Math.floor(offsetX / dayCellWidth) * dayCellWidth;
-  }
-  return { x, y };
-};
+export const getEventItem = (
+  col: BoardCol,
+  resource: Resource,
+  events: BoardEvent[],
+  config: BoardConfig,
+) => (
+  events.filter((event) => {
+    const dayFormat = config.date.format(DAY_FORMAT);
+    const unit = isDayViewMode(config) ? 'minute' : 'month';
+    const isEqual = dayjs(event.startDate).isSame(`${dayFormat} ${col.time}`, unit);
+    return event.rId === resource.id && isEqual;
+  })
+);

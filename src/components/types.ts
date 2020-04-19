@@ -6,6 +6,7 @@ export type BoardConfig = typeof config;
 
 export interface BoardCol {
   title: string;
+  time: string;
   key: string;
   width: number;
 }

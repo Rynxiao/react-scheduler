@@ -19,28 +19,36 @@ const getInterval = (hourInterval: number) => {
   return interval;
 };
 
-const generateDayHours = (lines: number) => {
-  const hours: string[] = [];
+const getTimeFormat = (time: number) => (time >= 10 ? `${time}` : `0${time}`);
+
+const generateDayHours = (lines: number, hourInterval: number) => {
+  const hours = [];
   const counts = lines * DAY_HOURS;
   const middleHour = 12;
 
   for (let i = 0; i < counts; i++) {
     let title;
+    let time;
     if (i % lines === 0) {
       const j = Math.floor(i / lines);
       if (j === 0) {
         title = '12:00 AM';
+        time = '00:00';
       } else if (j < middleHour) {
         title = `${j}:00 AM`;
+        time = `${getTimeFormat(j)}:00`;
       } else if (j === middleHour) {
         title = '12:00 PM';
+        time = '12:00';
       } else {
         title = `${j - middleHour}:00 PM`;
+        time = `${j}:00`;
       }
     } else {
       title = '';
+      time = `${getTimeFormat(Math.floor(i / lines))}:${getTimeFormat((i % lines) * hourInterval)}`;
     }
-    hours.push(title);
+    hours.push({ title, time });
   }
   return hours;
 };
@@ -63,9 +71,10 @@ export const getBoardWidth = (cols: BoardCol[]) => {
 const generateDayHeaders = (config: BoardConfig) => {
   if (!dayHeaders) {
     const lines = getLines(config);
-    const dayHourTitles = generateDayHours(lines);
-    dayHeaders = dayHourTitles.map((dayHourTitle, index) => ({
-      title: dayHourTitle,
+    const dayHours = generateDayHours(lines, config.hourInterval);
+    dayHeaders = dayHours.map((dayHour, index) => ({
+      title: dayHour.title,
+      time: dayHour.time,
       key: `headerCol${index}`,
       width: config.dayCellWidth,
     }));
@@ -85,7 +94,7 @@ const generateMonthHeaders = (config: BoardConfig) => {
       title = `${i}`;
     }
     const key = title;
-    cols.push({ title, key, width: config.colWidth });
+    cols.push({ title, time: `${i}`, key, width: config.colWidth });
   }
   return cols;
 };

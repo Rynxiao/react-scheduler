@@ -63,9 +63,6 @@ const useBoardStyles = useStyles((theme: AugmentedTheme) => ({
     backgroundColor: grey['100'],
     borderRight: `1px solid ${grey['300']}`,
     padding: 0,
-    '&:hover': {
-      backgroundColor: grey['200'],
-    },
   },
   workingCell: {
     backgroundColor: theme.palette.common.white,

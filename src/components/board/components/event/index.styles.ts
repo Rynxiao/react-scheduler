@@ -1,4 +1,5 @@
 import { BoardConfig } from '@app/components/types';
+import { grey } from '@app/material/colors';
 import { AugmentedTheme } from '@app/material/styles';
 import { useStyles } from '@app/utils';
 
@@ -12,22 +13,28 @@ const useEventBoardStyles = useStyles((theme: AugmentedTheme) => ({
     position: 'absolute',
     left: 0,
     top: 0,
-    right: 0,
-    bottom: 0,
   },
   eventItemWrapper: {
-    position: 'absolute',
     backgroundColor: theme.palette.primary.main,
     color: theme.palette.common.white,
     borderRadius: theme.shape.borderRadius,
     padding: theme.spacing(0.5),
     boxSizing: 'border-box',
     boxShadow: theme.shadows[2],
+    zIndex: 4,
   },
   eventItem: {
     overflow: 'hidden',
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
+  },
+  eventCell: {
+    display: 'inline-block',
+    position: 'relative',
+    verticalAlign: 'top',
+  },
+  hovered: {
+    backgroundColor: grey['200'],
   },
 }));
 

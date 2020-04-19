@@ -1,5 +1,5 @@
 import EventBoard from '@app/components/board/components/event';
-import { getBoardWidth, getEventItemStyleProps, getMatchedEvents } from '@app/components/board/utils';
+import { getBoardWidth, getMatchedEvents } from '@app/components/board/utils';
 import { getLines } from '@app/components/board/utils/main';
 import { BoardCol, BoardConfig, BoardEvent, Resource } from '@app/components/types';
 import { TableCell, TableContainer } from '@app/material/components';
@@ -30,14 +30,6 @@ const SchedulerBoard: React.FC<SchedulerBoardProps> = ({
   const [shouldShowShadow, setShowShadow] = useState(false);
   const lines = getLines(config);
   const boardWidth = getBoardWidth(cols);
-
-  useEffect(() => {
-    const eventsWidthStyleProps = events.map((event) => {
-      const eventItemStyleProps = getEventItemStyleProps(event, lines, config, resourceList);
-      return { ...event, ...eventItemStyleProps };
-    });
-    onEventsChange(eventsWidthStyleProps);
-  }, []);
 
   const handleFirstColCellShadowShow = (left: number) => {
     if (left > 0 && !shouldShowShadow) {
@@ -115,6 +107,8 @@ const SchedulerBoard: React.FC<SchedulerBoardProps> = ({
           lines={lines}
         />
         <EventBoard
+          cols={cols}
+          resourceList={resourceList}
           width={boardWidth}
           config={config}
           events={getMatchedEvents(events, config)}

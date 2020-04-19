@@ -11,6 +11,7 @@ const VIEW_MODE = {
 };
 
 export const DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
+export const DAY_FORMAT = 'YYYY-MM-DD';
 export const TIME_FORMAT = 'HH:mm';
 
 export const HOUR_MINUTES = 60;
