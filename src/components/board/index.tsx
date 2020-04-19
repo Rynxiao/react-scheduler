@@ -72,7 +72,7 @@ const SchedulerBoard: React.FC<SchedulerBoardProps> = ({
     if (!config.hiddenResourceCol) {
       return (
         <TableCell
-          key="resourceTitle"
+          key={key}
           className={classNames(classes.stickyCol, { [classes.fixedCol]: shouldShowShadow })}
           align="center"
         >
@@ -116,8 +116,8 @@ const SchedulerBoard: React.FC<SchedulerBoardProps> = ({
             {resourceList.map((resource) => {
               const resourceCellContent = resource.render ? resource.render(resource) : resource.name;
               return (
-                <TableRow key={resource.key}>
-                  {renderFirstColCell(`${resource.key}${resource.name}`, resourceCellContent)}
+                <TableRow key={resource.id}>
+                  {renderFirstColCell(`${resource.id}${resource.name}`, resourceCellContent)}
                   {cols.map((col, index) => (
                     <TableCell
                       style={{ height: `${config.rowHeight}px` }}
@@ -125,7 +125,7 @@ const SchedulerBoard: React.FC<SchedulerBoardProps> = ({
                         [classes.workingCell]: isWorkingHour(config, index, lines),
                       })}
                       align="center"
-                      key={`${resource.key}${col.key}`}
+                      key={`${resource.id}${col.key}`}
                       onClick={handleBodyCellClick}
                     />
                   ))}

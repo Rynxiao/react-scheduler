@@ -2,7 +2,7 @@ const generateResourceList = () => {
   const list = [];
   for (let i = 0; i < 15; i++) {
     list.push({
-      key: `${i}`,
+      id: `r${i}`,
       name: `resource${i}`,
     });
   }

@@ -1,4 +1,4 @@
-import generateResourceList from '@app/_mockData/resource';
+import generateResourceList from '@app/_mockData/resources';
 import SchedulerBoard from '@app/components/board';
 import boardConfig from '@app/components/board/config';
 import generateColHeaderByMode from '@app/components/board/utils';

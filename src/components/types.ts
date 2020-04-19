@@ -14,8 +14,17 @@ export type Mode = typeof VIEW_MODE;
 export type ModeKey = keyof Mode;
 
 export interface Resource {
-  key: string;
+  id: string;
   name: string;
   [key: string]: unknown;
   render?(resource: Resource): React.ReactNode;
+}
+
+export interface Event {
+  id: string;
+  startDate: string;
+  endDate: string;
+  rId: string;
+  [key: string]: unknown;
+  render?(event: Event): React.ReactNode;
 }
