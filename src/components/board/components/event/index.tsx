@@ -1,6 +1,12 @@
 import EventDropCell from '@app/components/board/components/event/eventDropCell';
 import { getEventItem } from '@app/components/board/utils';
-import { BoardCol, BoardConfig, BoardEvent, Resource } from '@app/components/types';
+import {
+  BoardCol,
+  BoardConfig,
+  BoardEvent,
+  EventDroppedObject,
+  Resource,
+} from '@app/components/types';
 import React from 'react';
 import useStyles, { generateEventBoardStyles } from './index.styles';
 
@@ -11,6 +17,7 @@ interface EventBoardProps {
   config: BoardConfig;
   events: BoardEvent[];
   onEventsChange(events: BoardEvent[]): void;
+  onDropped?(eventDroppedObject: EventDroppedObject): void;
 }
 
 const EventBoard: React.FC<EventBoardProps> = ({
@@ -19,8 +26,25 @@ const EventBoard: React.FC<EventBoardProps> = ({
   resourceList,
   events,
   config,
+  onEventsChange,
+  onDropped,
 }) => {
   const classes = useStyles();
+
+  const handleEventDropped = (eventDroppedObject: EventDroppedObject) => {
+    const newEvents = events.map((event) => {
+      const { rId, startDate, endDate } = eventDroppedObject;
+      if (event.rId === eventDroppedObject.originalEvent.rId && event.id === eventDroppedObject.originalEvent.id) {
+        return { ...event, rId, startDate, endDate };
+      }
+      return event;
+    });
+    onEventsChange(newEvents);
+    if (onDropped) {
+      onDropped(eventDroppedObject);
+    }
+  };
+
   return (
     <div
       className={classes.eventBoard}
@@ -31,7 +55,16 @@ const EventBoard: React.FC<EventBoardProps> = ({
           {
             cols.map((col) => {
               const cellEvents = getEventItem(col, resource, events, config);
-              return <EventDropCell key={`event${col.key}`} col={col} config={config} cellEvents={cellEvents} />;
+              return (
+                <EventDropCell
+                  key={`event${col.key}`}
+                  col={col}
+                  resource={resource}
+                  config={config}
+                  cellEvents={cellEvents}
+                  onEventDropped={handleEventDropped}
+                />
+              );
             })
           }
         </div>

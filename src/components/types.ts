@@ -1,6 +1,7 @@
 import config from '@app/components/board/config';
 import VIEW_MODE from '@app/components/constants';
 import React from 'react';
+import { DragObjectWithType } from 'react-dnd';
 
 export type BoardConfig = typeof config;
 
@@ -37,9 +38,18 @@ export interface BoardEvent extends Partial<PositionedItemTypes> {
   render?(event: BoardEvent): React.ReactNode;
 }
 
-export interface DroppedEventItem {
-  id: string;
-  type: string;
-  x: number;
-  y: number;
+export interface DragEventObject extends DragObjectWithType {
+  event: BoardEvent;
+  width: number;
+}
+
+export interface DragEventCollectedProps {
+  isOver: boolean;
+}
+
+export interface EventDroppedObject {
+  rId: string;
+  startDate: string;
+  endDate: string;
+  originalEvent: BoardEvent;
 }

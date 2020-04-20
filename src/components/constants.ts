@@ -10,7 +10,7 @@ const VIEW_MODE = {
   YEAR: 'Year',
 };
 
-export const DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
+export const DATE_FORMAT = 'YYYY-MM-DD HH:mm';
 export const DAY_FORMAT = 'YYYY-MM-DD';
 export const TIME_FORMAT = 'HH:mm';
 

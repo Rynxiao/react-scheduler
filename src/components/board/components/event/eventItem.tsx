@@ -13,13 +13,13 @@ interface EventItemProps {
 
 const EventItem: React.FC<EventItemProps> = ({ event, config }) => {
   const classes = useStyles();
+  const style = calculateEventCellStyleByDuration(event, config);
   const [{ isDragging }, drag] = useDrag({
-    item: { type: ITEM_TYPES.EVENT, event },
+    item: { type: ITEM_TYPES.EVENT, event, width: style.width },
     collect: (monitor) => ({
       isDragging: !!monitor.isDragging(),
     }),
   });
-  const style = calculateEventCellStyleByDuration(event, config);
 
   return (
     <div

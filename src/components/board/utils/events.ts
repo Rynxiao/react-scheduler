@@ -1,4 +1,4 @@
-import { DAY_FORMAT, DAY_HOURS, HOUR_MINUTES, MINUTE_UNIT, TIME_FORMAT } from '@app/components/constants';
+import { DATE_FORMAT, DAY_FORMAT, DAY_HOURS, HOUR_MINUTES, MINUTE_UNIT, TIME_FORMAT } from '@app/components/constants';
 import { BoardCol, BoardConfig, BoardEvent, Resource } from '@app/components/types';
 import dayjs, { Dayjs } from 'dayjs';
 import { getLines, isDayViewMode, isMonthViewMode } from './main';
@@ -40,6 +40,18 @@ export const getMatchedEvents = (events: BoardEvent[], config: BoardConfig) => {
   return [];
 };
 
+const fixStartEventMinute = (date: string) => {
+  let fixedMinute;
+  const initialDate = dayjs(date);
+  const minutes = initialDate.minute();
+  if (minutes >= 0 && minutes < 30) {
+    fixedMinute = 0;
+  } else if (minutes >= 30) {
+    fixedMinute = 30;
+  }
+  return initialDate.minute(fixedMinute);
+};
+
 export const getEventItem = (
   col: BoardCol,
   resource: Resource,
@@ -49,7 +61,29 @@ export const getEventItem = (
   events.filter((event) => {
     const dayFormat = config.date.format(DAY_FORMAT);
     const unit = isDayViewMode(config) ? 'minute' : 'month';
-    const isEqual = dayjs(event.startDate).isSame(`${dayFormat} ${col.time}`, unit);
+    const isEqual = fixStartEventMinute(event.startDate).isSame(`${dayFormat} ${col.time}`, unit);
     return event.rId === resource.id && isEqual;
   })
 );
+
+export const getEventCellTimes = (width: number, time: string, config: BoardConfig) => {
+  let startDate;
+  let endDate;
+  const { date, dayCellWidth } = config;
+  const lines = getLines(config);
+  const counts = width / dayCellWidth;
+  const lineMinute = HOUR_MINUTES / lines;
+  const hour = time.split(':')[0];
+  const min = time.split(':')[1];
+  if (isDayViewMode(config)) {
+    startDate = date.hour(Number(hour)).minute(Number(min)).second(0);
+    endDate = startDate.add(counts * lineMinute, 'minute');
+  } else if (isMonthViewMode(config)) {
+    startDate = date.day(Number(time));
+    endDate = startDate.add(counts, 'day');
+  }
+  return {
+    startDate: startDate.format(DATE_FORMAT),
+    endDate: endDate.format(DATE_FORMAT),
+  };
+};

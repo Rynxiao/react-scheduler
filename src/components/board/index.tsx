@@ -1,7 +1,13 @@
 import EventBoard from '@app/components/board/components/event';
 import { getBoardWidth, getMatchedEvents } from '@app/components/board/utils';
 import { getLines } from '@app/components/board/utils/main';
-import { BoardCol, BoardConfig, BoardEvent, Resource } from '@app/components/types';
+import {
+  BoardCol,
+  BoardConfig,
+  BoardEvent,
+  EventDroppedObject,
+  Resource,
+} from '@app/components/types';
 import { TableCell, TableContainer } from '@app/material/components';
 import classNames from 'classnames';
 import React, { useEffect, useRef, useState } from 'react';
@@ -15,6 +21,7 @@ export interface SchedulerBoardProps {
   events: BoardEvent[];
   config: BoardConfig;
   onEventsChange(events: BoardEvent[]): void;
+  onDropped?(eventDroppedObject: EventDroppedObject): void;
 }
 
 const SchedulerBoard: React.FC<SchedulerBoardProps> = ({
@@ -23,6 +30,7 @@ const SchedulerBoard: React.FC<SchedulerBoardProps> = ({
   config,
   events = [],
   onEventsChange,
+  onDropped,
 }) => {
   const classes = useStyles();
   const headRef = useRef(null);
@@ -113,6 +121,7 @@ const SchedulerBoard: React.FC<SchedulerBoardProps> = ({
           config={config}
           events={getMatchedEvents(events, config)}
           onEventsChange={onEventsChange}
+          onDropped={onDropped}
         />
       </TableContainer>
     </div>
