@@ -11,7 +11,7 @@ export const getHours = (startDate: Dayjs, endDate: Dayjs) => {
 export const getDayTime = (date: string) => dayjs(date).format(TIME_FORMAT);
 
 export const calculateEventCellStyleByDuration = (event: BoardEvent, config: BoardConfig) => {
-  const { dayCellWidth, rowHeight, colWidth } = config;
+  const { dayCellWidth, eventCellHeight, colWidth } = config;
   const lines = getLines(config);
   const start = dayjs(event.startDate);
   const end = dayjs(event.endDate);
@@ -27,7 +27,7 @@ export const calculateEventCellStyleByDuration = (event: BoardEvent, config: Boa
     duration = duration > daysInMonth ? daysInMonth : duration;
     width = (duration + 1) * colWidth;
   }
-  return { width, height: rowHeight };
+  return { width, height: eventCellHeight };
 };
 
 export const getMatchedEvents = (events: BoardEvent[], config: BoardConfig) => {

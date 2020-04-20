@@ -7,6 +7,7 @@ const boardConfig = {
   date: dayjs(),
   colWidth: 100,
   rowHeight: 68,
+  eventCellHeight: 52,
 
   resourceTitle: 'Resources',
   resourceColWidth: 150,
