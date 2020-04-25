@@ -16,8 +16,7 @@ interface EventBoardProps {
   resourceList: Resource[];
   config: BoardConfig;
   events: BoardEvent[];
-  onEventsChange(events: BoardEvent[]): void;
-  onDropped?(eventDroppedObject: EventDroppedObject): void;
+  onEventDropped(eventDroppedObject: EventDroppedObject): void;
 }
 
 const EventBoard: React.FC<EventBoardProps> = ({
@@ -26,24 +25,9 @@ const EventBoard: React.FC<EventBoardProps> = ({
   resourceList,
   events,
   config,
-  onEventsChange,
-  onDropped,
+  onEventDropped,
 }) => {
   const classes = useStyles();
-
-  const handleEventDropped = (eventDroppedObject: EventDroppedObject) => {
-    const newEvents = events.map((event) => {
-      const { rId, startDate, endDate } = eventDroppedObject;
-      if (event.rId === eventDroppedObject.originalEvent.rId && event.id === eventDroppedObject.originalEvent.id) {
-        return { ...event, rId, startDate, endDate };
-      }
-      return event;
-    });
-    onEventsChange(newEvents);
-    if (onDropped) {
-      onDropped(eventDroppedObject);
-    }
-  };
 
   return (
     <div
@@ -63,7 +47,7 @@ const EventBoard: React.FC<EventBoardProps> = ({
                   resource={resource}
                   config={config}
                   cellEvents={cellEvents}
-                  onEventDropped={handleEventDropped}
+                  onEventDropped={onEventDropped}
                 />
               );
             })

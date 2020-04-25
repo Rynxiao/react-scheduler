@@ -94,6 +94,20 @@ const SchedulerBoard: React.FC<SchedulerBoardProps> = ({
     return null;
   };
 
+  const handleEventDropped = (eventDroppedObject: EventDroppedObject) => {
+    const newEvents = events.map((event) => {
+      const { rId, startDate, endDate } = eventDroppedObject;
+      if (event.rId === eventDroppedObject.originalEvent.rId && event.id === eventDroppedObject.originalEvent.id) {
+        return { ...event, rId, startDate, endDate };
+      }
+      return event;
+    });
+    onEventsChange(newEvents);
+    if (onDropped) {
+      onDropped(eventDroppedObject);
+    }
+  };
+
   return (
     <div className={classes.container}>
       <TableContainer className={classes.header} ref={headRef}>
@@ -120,8 +134,7 @@ const SchedulerBoard: React.FC<SchedulerBoardProps> = ({
           width={boardWidth}
           config={config}
           events={getMatchedEvents(events, config)}
-          onEventsChange={onEventsChange}
-          onDropped={onDropped}
+          onEventDropped={handleEventDropped}
         />
       </TableContainer>
     </div>
