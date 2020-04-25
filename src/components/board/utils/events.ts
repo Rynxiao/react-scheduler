@@ -1,7 +1,18 @@
-import { DATE_FORMAT, DAY_FORMAT, DAY_HOURS, HOUR_MINUTES, MINUTE_UNIT, TIME_FORMAT } from '@app/components/constants';
+import {
+  DATE_FORMAT,
+  DAY_HOURS,
+  DAY_JS_UNIT_DAY,
+  DAY_JS_UNIT_MINUTE,
+  HOUR_MINUTES,
+  MINUTE_UNIT,
+  TIME_FORMAT,
+} from '@app/components/constants';
 import { BoardCol, BoardConfig, BoardEvent, Resource } from '@app/components/types';
 import dayjs, { Dayjs } from 'dayjs';
+import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
 import { getLines, isDayViewMode, isMonthViewMode } from './main';
+
+dayjs.extend(isSameOrAfter);
 
 export const getHours = (startDate: Dayjs, endDate: Dayjs) => {
   const hours = Number((endDate.diff(startDate, MINUTE_UNIT) / HOUR_MINUTES).toFixed(1));
@@ -40,31 +51,11 @@ export const getMatchedEvents = (events: BoardEvent[], config: BoardConfig) => {
   return [];
 };
 
-const fixStartEventMinute = (date: string) => {
-  let fixedMinute;
-  const initialDate = dayjs(date);
-  const minutes = initialDate.minute();
-  if (minutes >= 0 && minutes < 30) {
-    fixedMinute = 0;
-  } else if (minutes >= 30) {
-    fixedMinute = 30;
-  }
-  return initialDate.minute(fixedMinute);
+export const getDateTimeBaseOnToday = (time: string, date: Dayjs) => {
+  const hour = time.split(':')[0];
+  const min = time.split(':')[1];
+  return date.hour(Number(hour)).minute(Number(min)).second(0);
 };
-
-export const getEventItem = (
-  col: BoardCol,
-  resource: Resource,
-  events: BoardEvent[],
-  config: BoardConfig,
-) => (
-  events.filter((event) => {
-    const dayFormat = config.date.format(DAY_FORMAT);
-    const unit = isDayViewMode(config) ? 'minute' : 'month';
-    const isEqual = fixStartEventMinute(event.startDate).isSame(`${dayFormat} ${col.time}`, unit);
-    return event.rId === resource.id && isEqual;
-  })
-);
 
 export const getEventCellTimes = (width: number, time: string, config: BoardConfig) => {
   let startDate;
@@ -73,17 +64,34 @@ export const getEventCellTimes = (width: number, time: string, config: BoardConf
   const lines = getLines(config);
   const counts = width / dayCellWidth;
   const lineMinute = HOUR_MINUTES / lines;
-  const hour = time.split(':')[0];
-  const min = time.split(':')[1];
   if (isDayViewMode(config)) {
-    startDate = date.hour(Number(hour)).minute(Number(min)).second(0);
-    endDate = startDate.add(counts * lineMinute, 'minute');
+    startDate = getDateTimeBaseOnToday(time, date);
+    endDate = startDate.add(counts * lineMinute, DAY_JS_UNIT_MINUTE);
   } else if (isMonthViewMode(config)) {
     startDate = date.day(Number(time));
-    endDate = startDate.add(counts, 'day');
+    endDate = startDate.add(counts, DAY_JS_UNIT_DAY);
   }
   return {
     startDate: startDate.format(DATE_FORMAT),
     endDate: endDate.format(DATE_FORMAT),
   };
+};
+
+export const getEventItem = (
+  col: BoardCol,
+  nextCol: BoardCol,
+  resource: Resource,
+  events: BoardEvent[],
+  config: BoardConfig,
+) => {
+  const { date } = config;
+  const startDate = getDateTimeBaseOnToday(col.time, date);
+  const endDate = nextCol !== null
+    ? getDateTimeBaseOnToday(nextCol.time, date)
+    : date.startOf(DAY_JS_UNIT_DAY).add(1, DAY_JS_UNIT_DAY);
+  return events.filter((event) => {
+    const isEqual = dayjs(event.startDate).isSameOrAfter(startDate, DAY_JS_UNIT_MINUTE)
+      && endDate.isAfter(dayjs(event.startDate), DAY_JS_UNIT_MINUTE);
+    return event.rId === resource.id && isEqual;
+  });
 };

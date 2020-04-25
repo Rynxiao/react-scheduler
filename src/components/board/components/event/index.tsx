@@ -53,8 +53,9 @@ const EventBoard: React.FC<EventBoardProps> = ({
       {resourceList.map((resource) => (
         <div key={`event${resource.id}`} style={{ height: `${config.rowHeight + 1}px` }}>
           {
-            cols.map((col) => {
-              const cellEvents = getEventItem(col, resource, events, config);
+            cols.map((col, index) => {
+              const nextCol = index < cols.length - 1 ? cols[index + 1] : null;
+              const cellEvents = getEventItem(col, nextCol, resource, events, config);
               return (
                 <EventDropCell
                   key={`event${col.key}`}

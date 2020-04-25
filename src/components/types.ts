@@ -22,14 +22,7 @@ export interface Resource {
   render?(resource: Resource): React.ReactNode;
 }
 
-export type PositionedItemTypes = {
-  width: number | string;
-  height: number | string;
-  left: number | string;
-  top: number | string;
-};
-
-export interface BoardEvent extends Partial<PositionedItemTypes> {
+export interface BoardEvent {
   id: string;
   startDate: string;
   endDate: string;
