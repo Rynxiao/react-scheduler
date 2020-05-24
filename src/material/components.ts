@@ -4,6 +4,7 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuItem from '@material-ui/core/MenuItem';
 import Paper from '@material-ui/core/Paper';
+import Popover from '@material-ui/core/Popover';
 import Select from '@material-ui/core/Select';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -30,4 +31,5 @@ export {
   TableContainer,
   TableHead,
   TableRow,
+  Popover,
 };
