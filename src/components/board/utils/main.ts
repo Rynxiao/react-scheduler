@@ -7,6 +7,12 @@ let boardWidth: number;
 
 export const isDayViewMode = (config: BoardConfig) => config.viewMode === DAY;
 export const isMonthViewMode = (config: BoardConfig) => config.viewMode === MONTH;
+export const getColWidth = (config: BoardConfig) => {
+  if (isDayViewMode(config)) {
+    return config.dayCellWidth;
+  }
+  return config.colWidth;
+};
 
 const getInterval = (hourInterval: number) => {
   let interval = hourInterval;

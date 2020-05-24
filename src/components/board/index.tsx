@@ -97,7 +97,10 @@ const SchedulerBoard: React.FC<SchedulerBoardProps> = ({
   const handleEventDropped = (eventDroppedObject: EventDroppedObject) => {
     const newEvents = events.map((event) => {
       const { rId, startDate, endDate } = eventDroppedObject;
-      if (event.rId === eventDroppedObject.originalEvent.rId && event.id === eventDroppedObject.originalEvent.id) {
+      if (
+        event.rId === eventDroppedObject.originalEvent.rId
+        && event.id === eventDroppedObject.originalEvent.id
+      ) {
         return { ...event, rId, startDate, endDate };
       }
       return event;
