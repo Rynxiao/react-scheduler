@@ -22,6 +22,10 @@ export interface Resource {
   render?(resource: Resource): React.ReactNode;
 }
 
+export interface BoardEventExtra {
+  [key: string]: unknown;
+}
+
 export interface BoardEvent {
   id: string;
   startDate: string;
@@ -29,6 +33,7 @@ export interface BoardEvent {
   rId: string;
   [key: string]: unknown;
   render?(event: BoardEvent): React.ReactNode;
+  extra?: BoardEventExtra;
 }
 
 export interface DragEventObject extends DragObjectWithType {

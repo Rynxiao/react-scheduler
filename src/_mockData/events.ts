@@ -29,6 +29,9 @@ const eventList = [
     startDate: times[4],
     endDate: times[5],
     rId: 'r1',
+    extra: {
+      description: 'This a event2',
+    },
   },
   {
     id: 'e3',
