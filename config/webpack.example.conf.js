@@ -1,7 +1,6 @@
-const merge = require('webpack-merge');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-
 const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const merge = require('webpack-merge');
 
 const root = path.resolve(__dirname, '..');
 const examplePath = path.resolve(root, 'examples');
