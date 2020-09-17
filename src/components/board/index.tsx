@@ -20,8 +20,7 @@ export interface SchedulerBoardProps {
   resourceList?: Resource[];
   events: BoardEvent[];
   config: BoardConfig;
-  onEventsChange(events: BoardEvent[]): void;
-  onDropped?(eventDroppedObject: EventDroppedObject): void;
+  onDropped(eventDroppedObject: EventDroppedObject): void;
 }
 
 const SchedulerBoard: React.FC<SchedulerBoardProps> = ({
@@ -29,7 +28,6 @@ const SchedulerBoard: React.FC<SchedulerBoardProps> = ({
   resourceList = [],
   config,
   events = [],
-  onEventsChange,
   onDropped,
 }) => {
   const classes = useStyles();
@@ -94,23 +92,6 @@ const SchedulerBoard: React.FC<SchedulerBoardProps> = ({
     return null;
   };
 
-  const handleEventDropped = (eventDroppedObject: EventDroppedObject) => {
-    const newEvents = events.map((event) => {
-      const { rId, startDate, endDate } = eventDroppedObject;
-      if (
-        event.rId === eventDroppedObject.originalEvent.rId
-        && event.id === eventDroppedObject.originalEvent.id
-      ) {
-        return { ...event, rId, startDate, endDate };
-      }
-      return event;
-    });
-    onEventsChange(newEvents);
-    if (onDropped) {
-      onDropped(eventDroppedObject);
-    }
-  };
-
   return (
     <div className={classes.container}>
       <TableContainer className={classes.header} ref={headRef}>
@@ -132,12 +113,11 @@ const SchedulerBoard: React.FC<SchedulerBoardProps> = ({
           lines={lines}
         />
         <EventBoard
-          cols={cols}
           resourceList={resourceList}
           width={boardWidth}
           config={config}
           events={getMatchedEvents(events, config)}
-          onEventDropped={handleEventDropped}
+          onEventDropped={onDropped}
         />
       </TableContainer>
     </div>

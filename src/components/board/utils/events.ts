@@ -21,15 +21,48 @@ export const getHours = (startDate: Dayjs, endDate: Dayjs) => {
 
 export const getDayTime = (date: string) => dayjs(date).format(TIME_FORMAT);
 
-export const calculateEventCellStyleByDuration = (event: BoardEvent, config: BoardConfig) => {
+export const getUnitWidth = (config: BoardConfig) => (
+  isDayViewMode(config) ? config.dayCellWidth : config.colWidth
+);
+
+export const widthOfMinute = (config: BoardConfig) => {
+  const lines = getLines(config);
+  return (getUnitWidth(config) * lines) / HOUR_MINUTES;
+};
+
+export const minuteOfWidth = (config: BoardConfig) => 1 / widthOfMinute(config);
+
+export const getTimeBy = (leftOffset: number, config: BoardConfig) => {
+  const duration = leftOffset * minuteOfWidth(config);
+  const hour = Math.floor(duration / HOUR_MINUTES);
+  const min = Math.floor(duration % HOUR_MINUTES);
+  return { hour, min };
+};
+
+export const getLeftOffset = (start: string | Dayjs, config: BoardConfig) => {
+  const dayStart = dayjs(start);
+  const duration = dayStart.hour() * HOUR_MINUTES + dayStart.minute();
+  return duration * widthOfMinute(config);
+};
+
+export const setSpecificTime = (
+  date: string | Dayjs,
+  hour = 0,
+  min = 0,
+  second = 0,
+) => dayjs(date).hour(hour).minute(min).second(second);
+
+export const getEventCellStyle = (event: BoardEvent, config: BoardConfig) => {
   const { dayCellWidth, eventCellHeight, colWidth } = config;
   const lines = getLines(config);
   const start = dayjs(event.startDate);
   const end = dayjs(event.endDate);
   let width;
+  let left = 0;
   if (isDayViewMode(config)) {
     const duration = getHours(start, end);
     width = duration * lines * dayCellWidth;
+    left = getLeftOffset(start, config);
   } else if (isMonthViewMode(config)) {
     const startDay = start.date();
     const endDay = end.date();
@@ -38,7 +71,7 @@ export const calculateEventCellStyleByDuration = (event: BoardEvent, config: Boa
     duration = duration > daysInMonth ? daysInMonth : duration;
     width = (duration + 1) * colWidth;
   }
-  return { width, height: eventCellHeight };
+  return { width, height: eventCellHeight, left };
 };
 
 export const getMatchedEvents = (events: BoardEvent[], config: BoardConfig) => {
@@ -57,28 +90,19 @@ export const getDateTimeBaseOnToday = (time: string, date: Dayjs) => {
   return date.hour(Number(hour)).minute(Number(min)).second(0);
 };
 
-export const getUnitWidth = (config: BoardConfig) => (
-  isDayViewMode(config) ? config.dayCellWidth : config.colWidth
-);
-
-export const getEventCellTimes = (width: number, time: string, config: BoardConfig) => {
-  let startDate;
-  let endDate;
-  const { date } = config;
-  const lines = getLines(config);
-  const counts = width / getUnitWidth(config);
-  const lineMinute = HOUR_MINUTES / lines;
-  if (isDayViewMode(config)) {
-    startDate = getDateTimeBaseOnToday(time, date);
-    endDate = startDate.add(counts * lineMinute, DAY_JS_UNIT_MINUTE);
-  } else if (isMonthViewMode(config)) {
-    startDate = date.date(Number(time));
-    endDate = startDate.add(counts - 1, DAY_JS_UNIT_DAY);
-  }
+export const getEventTimeBy = (
+  event: BoardEvent,
+  width: number,
+  left: number,
+  config: BoardConfig,
+) => {
+  const { hour, min } = getTimeBy(left, config);
+  const { hour: endHour, min: endMin } = getTimeBy(left + width, config);
+  const { startDate } = event;
 
   return {
-    startDate: startDate.format(DATE_FORMAT),
-    endDate: endDate.format(DATE_FORMAT),
+    startDate: setSpecificTime(startDate, hour, min).format(DATE_FORMAT),
+    endDate: setSpecificTime(startDate, endHour, endMin).format(DATE_FORMAT),
   };
 };
 

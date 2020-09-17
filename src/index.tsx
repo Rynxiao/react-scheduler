@@ -4,7 +4,7 @@ import SchedulerBoard from '@app/components/board';
 import boardConfig from '@app/components/board/config';
 import generateColHeaderByMode from '@app/components/board/utils/main';
 import { MONTH } from '@app/components/constants';
-import { BoardCol, BoardConfig, BoardEvent, ModeKey } from '@app/components/types';
+import { BoardCol, BoardConfig, BoardEvent, EventDroppedObject, ModeKey } from '@app/components/types';
 import { MuiPickersUtilsProvider } from '@app/material/pickers';
 import { ThemeProvider } from '@app/material/styles';
 import { appTheme } from '@app/utils';
@@ -46,7 +46,17 @@ const Index: React.FC<SchedulerBoardProps> = ({
     setConfig(newConfig);
   };
 
-  const handleEventsChange = (boardEvents: BoardEvent[]) => setEvents(boardEvents);
+  const handleEventDropped = (eventDroppedObject: EventDroppedObject) => {
+    const { rId, startDate, endDate } = eventDroppedObject.current;
+    const { id } = eventDroppedObject.original;
+    const newEvents = events.map((event) => {
+      if (event.id === id) {
+        return { ...event, rId, startDate, endDate };
+      }
+      return event;
+    });
+    setEvents(newEvents);
+  };
 
   return (
     <ThemeProvider theme={appTheme}>
@@ -68,7 +78,7 @@ const Index: React.FC<SchedulerBoardProps> = ({
                   resourceList={generateResourceList()}
                   config={config}
                   events={events}
-                  onEventsChange={handleEventsChange}
+                  onDropped={handleEventDropped}
                 />
               </div>
             </div>

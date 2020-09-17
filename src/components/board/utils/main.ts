@@ -62,7 +62,8 @@ const generateDayHours = (lines: number, hourInterval: number) => {
 export const getLines = (config: BoardConfig) => {
   if (!linesInCol) {
     const interval = getInterval(config.hourInterval);
-    return Math.floor(HOUR_MINUTES / interval);
+    linesInCol = Math.floor(HOUR_MINUTES / interval);
+    return linesInCol;
   }
   return linesInCol;
 };

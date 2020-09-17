@@ -1,12 +1,12 @@
 import ITEM_TYPES from '@app/components/board/components/event/constants';
 import EventItem from '@app/components/board/components/event/eventItem';
-import { getEventCellTimes, isDayViewMode } from '@app/components/board/utils';
+import { getEventTimeBy, getLeftOffset } from '@app/components/board/utils';
 import {
-  BoardCol,
   BoardConfig,
   BoardEvent,
   DragEventCollectedProps,
-  DragEventObject, EventDroppedObject,
+  DragEventObject,
+  EventDroppedObject,
   Resource,
 } from '@app/components/types';
 import classNames from 'classnames';
@@ -15,31 +15,33 @@ import { useDrop } from 'react-dnd';
 import useStyles from './index.styles';
 
 interface EventDropCellProps {
-  col: BoardCol;
   resource: Resource;
   config: BoardConfig;
   cellEvents: BoardEvent[];
+
   onEventDropped(eventDroppedObject: EventDroppedObject): void;
 }
 
-const EventDropCell: React.FC<EventDropCellProps> = ({
-  col,
+const EventDropRow: React.FC<EventDropCellProps> = ({
   resource,
   config,
   cellEvents,
   onEventDropped,
 }) => {
-  let droppedEle: HTMLDivElement;
   const classes = useStyles();
-  const colWidth = isDayViewMode(config) ? config.dayCellWidth : config.colWidth;
   const [{ isOver }, drop] = useDrop<DragEventObject, void, DragEventCollectedProps>({
     accept: ITEM_TYPES.EVENT,
-    drop(item) {
+    drop(item, monitor) {
+      const { id } = resource;
       const { width } = item;
-      const time = droppedEle.getAttribute('data-col-start');
-      const rId = droppedEle.getAttribute('data-resource-id');
-      const { startDate, endDate } = getEventCellTimes(width, time, config);
-      onEventDropped({ rId, startDate, endDate, originalEvent: item.event });
+      const offset = monitor.getDifferenceFromInitialOffset();
+      const itemLeft = getLeftOffset(item.event.startDate, config) + offset.x;
+      const { startDate, endDate } = getEventTimeBy(item.event, width, itemLeft, config);
+      onEventDropped({
+        current: { rId: id, startDate, endDate },
+        original: item.event,
+      });
+      return offset;
     },
     collect: (monitor) => ({
       isOver: !!monitor.isOver(),
@@ -48,15 +50,9 @@ const EventDropCell: React.FC<EventDropCellProps> = ({
 
   return (
     <div
-      ref={(element) => {
-        droppedEle = element;
-        return drop(element);
-      }}
-      key={`event${col.key}`}
-      className={classNames(classes.eventCell, { [classes.hovered]: isOver })}
-      style={{ width: `${colWidth}px`, height: `${config.rowHeight}px` }}
-      data-resource-id={resource.id}
-      data-col-start={col.time}
+      ref={drop}
+      className={classNames(classes.eventRow, { [classes.hovered]: isOver })}
+      style={{ height: `${config.rowHeight + 1}px` }}
     >
       {cellEvents.map((cellEvent) => (
         <EventItem key={`cellEvent${cellEvent.id}`} event={cellEvent} config={config} />
@@ -65,4 +61,4 @@ const EventDropCell: React.FC<EventDropCellProps> = ({
   );
 };
 
-export default EventDropCell;
+export default EventDropRow;

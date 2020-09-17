@@ -15,6 +15,8 @@ const useEventBoardStyles = useStyles((theme: AugmentedTheme) => ({
     top: 0,
   },
   eventItemWrapper: {
+    position: 'absolute',
+    top: 0,
     backgroundColor: theme.palette.primary.main,
     color: theme.palette.common.white,
     borderRadius: theme.shape.borderRadius,
@@ -32,6 +34,10 @@ const useEventBoardStyles = useStyles((theme: AugmentedTheme) => ({
     display: 'inline-block',
     position: 'relative',
     verticalAlign: 'top',
+  },
+  eventRow: {
+    position: 'relative',
+    width: '100%',
   },
   hovered: {
     backgroundColor: grey['200'],

@@ -36,6 +36,12 @@ export interface BoardEvent {
   extra?: BoardEventExtra;
 }
 
+export interface UpdatedEvent {
+  rId: string;
+  startDate: string;
+  endDate: string;
+}
+
 export interface DragEventObject extends DragObjectWithType {
   event: BoardEvent;
   width: number;
@@ -46,8 +52,6 @@ export interface DragEventCollectedProps {
 }
 
 export interface EventDroppedObject {
-  rId: string;
-  startDate: string;
-  endDate: string;
-  originalEvent: BoardEvent;
+  current: UpdatedEvent;
+  original: BoardEvent;
 }
