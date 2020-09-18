@@ -39,7 +39,10 @@ const useEventBoardStyles = useStyles((theme: AugmentedTheme) => ({
     position: 'relative',
     width: '100%',
   },
-  hovered: {
+  eventShadow: {
+    position: 'absolute',
+    top: 0,
+    zIndex: 3,
     backgroundColor: grey['200'],
   },
 }));

@@ -9,7 +9,6 @@ import {
   EventDroppedObject,
   Resource,
 } from '@app/components/types';
-import classNames from 'classnames';
 import React from 'react';
 import { useDrop } from 'react-dnd';
 import useStyles from './index.styles';
@@ -18,7 +17,6 @@ interface EventDropCellProps {
   resource: Resource;
   config: BoardConfig;
   cellEvents: BoardEvent[];
-
   onEventDropped(eventDroppedObject: EventDroppedObject): void;
 }
 
@@ -29,6 +27,7 @@ const EventDropRow: React.FC<EventDropCellProps> = ({
   onEventDropped,
 }) => {
   const classes = useStyles();
+  const [hoverStyle, setHoverStyle] = React.useState({});
   const [{ isOver }, drop] = useDrop<DragEventObject, void, DragEventCollectedProps>({
     accept: ITEM_TYPES.EVENT,
     drop(item, monitor) {
@@ -43,17 +42,30 @@ const EventDropRow: React.FC<EventDropCellProps> = ({
       });
       return offset;
     },
+    hover(item, monitor) {
+      const { width, event } = item;
+      const offset = monitor.getDifferenceFromInitialOffset();
+      const itemLeft = getLeftOffset(event.startDate, config) + offset.x;
+      setHoverStyle({ ...hoverStyle, left: `${itemLeft}px`, width: `${width}px` });
+    },
     collect: (monitor) => ({
       isOver: !!monitor.isOver(),
     }),
   });
+  const height = config.rowHeight + 1;
 
   return (
     <div
       ref={drop}
-      className={classNames(classes.eventRow, { [classes.hovered]: isOver })}
-      style={{ height: `${config.rowHeight + 1}px` }}
+      className={classes.eventRow}
+      style={{ height: `${height}px` }}
     >
+      {isOver && (
+        <div
+          className={classes.eventShadow}
+          style={{ ...hoverStyle, height: `${height}px` }}
+        />
+      )}
       {cellEvents.map((cellEvent) => (
         <EventItem key={`cellEvent${cellEvent.id}`} event={cellEvent} config={config} />
       ))}
