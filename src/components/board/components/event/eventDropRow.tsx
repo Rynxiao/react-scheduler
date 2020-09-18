@@ -62,7 +62,7 @@ const EventDropRow: React.FC<EventDropCellProps> = ({
     >
       {isOver && (
         <div
-          className={classes.eventShadow}
+          className={classes.eventRowHover}
           style={{ ...hoverStyle, height: `${height}px` }}
         />
       )}

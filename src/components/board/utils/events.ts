@@ -46,7 +46,7 @@ export const setSpecificTime = (
   second = 0,
 ) => dayjs(date).hour(hour).minute(min).second(second);
 
-export const getEventCellStyle = (event: BoardEvent, config: BoardConfig) => {
+export const getEventItemStyle = (event: BoardEvent, config: BoardConfig) => {
   const { eventCellHeight, colWidth } = config;
   const start = dayjs(event.startDate);
   const end = dayjs(event.endDate);

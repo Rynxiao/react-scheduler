@@ -1,7 +1,8 @@
 import ITEM_TYPES from '@app/components/board/components/event/constants';
-import { getEventCellStyle, getDayTime } from '@app/components/board/utils';
+import { getEventItemStyle, getDayTime } from '@app/components/board/utils';
 import { BoardConfig, BoardEvent } from '@app/components/types';
 import { Popover, Typography } from '@app/material/components';
+import classNames from 'classnames';
 import React from 'react';
 import { useDrag } from 'react-dnd';
 import useStyles from './index.styles';
@@ -13,7 +14,7 @@ interface EventItemProps {
 
 const EventItem: React.FC<EventItemProps> = ({ event, config }) => {
   const classes = useStyles();
-  const style = getEventCellStyle(event, config);
+  const style = getEventItemStyle(event, config);
   const [anchorEl, setAnchorEl] = React.useState<HTMLDivElement | null>(null);
 
   const [{ isDragging }, drag] = useDrag({
@@ -39,7 +40,7 @@ const EventItem: React.FC<EventItemProps> = ({ event, config }) => {
       <div
         onClick={handleClick}
         role="presentation"
-        className={classes.eventItemWrapper}
+        className={classNames(classes.eventItemWrapper, { [classes.isDragging]: isDragging })}
         style={{
           width: `${style.width}px`,
           height: `${style.height}px`,

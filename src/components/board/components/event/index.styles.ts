@@ -1,6 +1,5 @@
 import { BoardConfig } from '@app/components/types';
-import { grey } from '@app/material/colors';
-import { AugmentedTheme } from '@app/material/styles';
+import { AugmentedTheme, fade } from '@app/material/styles';
 import { useStyles } from '@app/utils';
 
 export const generateEventBoardStyles = (width: number, config: BoardConfig) => ({
@@ -25,25 +24,23 @@ const useEventBoardStyles = useStyles((theme: AugmentedTheme) => ({
     boxShadow: theme.shadows[2],
     zIndex: 4,
   },
+  isDragging: {
+    backgroundColor: fade(theme.palette.primary.main, 0.5),
+  },
   eventItem: {
     overflow: 'hidden',
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
   },
-  eventCell: {
-    display: 'inline-block',
-    position: 'relative',
-    verticalAlign: 'top',
-  },
   eventRow: {
     position: 'relative',
     width: '100%',
   },
-  eventShadow: {
+  eventRowHover: {
     position: 'absolute',
     top: 0,
     zIndex: 3,
-    backgroundColor: grey['200'],
+    backgroundColor: fade(theme.palette.common.black, 0.3),
   },
 }));
 
