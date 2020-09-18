@@ -3,7 +3,7 @@ import { getEventCellStyle, getDayTime } from '@app/components/board/utils';
 import { BoardConfig, BoardEvent } from '@app/components/types';
 import { Popover, Typography } from '@app/material/components';
 import React from 'react';
-import { useDrag, XYCoord } from 'react-dnd';
+import { useDrag } from 'react-dnd';
 import useStyles from './index.styles';
 
 interface EventItemProps {
@@ -15,16 +15,9 @@ const EventItem: React.FC<EventItemProps> = ({ event, config }) => {
   const classes = useStyles();
   const style = getEventCellStyle(event, config);
   const [anchorEl, setAnchorEl] = React.useState<HTMLDivElement | null>(null);
-  const [offset, setOffset] = React.useState(0);
 
   const [{ isDragging }, drag] = useDrag({
     item: { type: ITEM_TYPES.EVENT, event, width: style.width },
-    end: (item, monitor) => {
-      if (monitor.didDrop()) {
-        const dropResult = monitor.getDropResult() as XYCoord;
-        setOffset(offset + dropResult.x);
-      }
-    },
     collect: (monitor) => ({
       isDragging: !!monitor.isDragging(),
     }),
@@ -50,7 +43,7 @@ const EventItem: React.FC<EventItemProps> = ({ event, config }) => {
         style={{
           width: `${style.width}px`,
           height: `${style.height}px`,
-          left: `${style.left + offset}px`,
+          left: `${style.left}px`,
           cursor: isDragging ? 'move' : 'default',
         }}
         ref={drag}

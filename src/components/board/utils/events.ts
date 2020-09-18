@@ -1,6 +1,5 @@
 import {
   DATE_FORMAT,
-  DAY_HOURS,
   DAY_JS_UNIT_DAY,
   DAY_JS_UNIT_MINUTE,
   HOUR_MINUTES,
@@ -13,11 +12,6 @@ import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
 import { getLines, isDayViewMode, isMonthViewMode } from './main';
 
 dayjs.extend(isSameOrAfter);
-
-export const getHours = (startDate: Dayjs, endDate: Dayjs) => {
-  const hours = Number((endDate.diff(startDate, MINUTE_UNIT) / HOUR_MINUTES).toFixed(1));
-  return hours > DAY_HOURS ? DAY_HOURS : hours;
-};
 
 export const getDayTime = (date: string) => dayjs(date).format(TIME_FORMAT);
 
@@ -53,15 +47,14 @@ export const setSpecificTime = (
 ) => dayjs(date).hour(hour).minute(min).second(second);
 
 export const getEventCellStyle = (event: BoardEvent, config: BoardConfig) => {
-  const { dayCellWidth, eventCellHeight, colWidth } = config;
-  const lines = getLines(config);
+  const { eventCellHeight, colWidth } = config;
   const start = dayjs(event.startDate);
   const end = dayjs(event.endDate);
   let width;
   let left = 0;
   if (isDayViewMode(config)) {
-    const duration = getHours(start, end);
-    width = duration * lines * dayCellWidth;
+    const duration = end.diff(start, MINUTE_UNIT);
+    width = duration * widthOfMinute(config);
     left = getLeftOffset(start, config);
   } else if (isMonthViewMode(config)) {
     const startDay = start.date();
